@@ -14,21 +14,9 @@ Check **for-devs.md** for details.
 
 This repository includes both the plugin code, and the workflow tools:
 
-- `.github/workflows` - GitHub Actions: (CI/CD) workflows
-- `assets` - TypeScript and Sass source files; [ESLint](https://eslint.org/), [Prettifier](https://prettier.io/)
-  and [Vite](https://vitejs.dev/) configs
-- `data-for-tests` - files involved in GitHub actions
-- `php-tools`
--
-    * `code-quality`  - composer packages and configs
-      for [PHPStan](https://phpstan.org/), [PHPSniffer](https://github.com/squizlabs/PHP_CodeSniffer)
-      and [Pest](https://pestphp.com/)
-    * `origin-vendors`  - composer dependencies
-    * `scoper` - PHP tool for package scoping (as WP doesn't support composer)
-- `prosopo-procaptcha` - plugin source code
-- `tests` - end-to-end [Cypress](https://cypress.io) tests
-- `tools` - bash scripts, used CI/CD or manually.
-- `wordpress-org-assets` - images for the WordPress SVN repository
+- `docker` - Docker Compose config for the test PrestaShop installation, along with volumes and a test DB dump
+- `prosopo-procaptcha` - PrestaShop module
+- `tools` - assisting bash scripts
 
 ## 3. Related Resources
 
