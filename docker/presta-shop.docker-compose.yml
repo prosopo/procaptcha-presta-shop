@@ -1,0 +1,51 @@
+services:
+  mysql:
+    container_name: prestashop-mysql
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: prestashop
+      MYSQL_ROOT_PASSWORD: jru5R4393Ffk
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+    networks:
+      - prestashop_network
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: prestashop-phpmyadmin
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_ARBITRARY: 1
+      PMA_USER: root
+      PMA_PASSWORD: jru5R4393Ffk
+    restart: unless-stopped
+    ports:
+      - 9385:80
+    networks:
+      - prestashop_network
+  prestashop:
+    container_name: prestashop
+    image: prestashop/prestashop:latest
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    ports:
+      - 9461:80
+    environment:
+      DB_SERVER: mysql
+      DB_NAME: prestashop
+      DB_USER: root
+      DB_PASSWD: jru5R4393Ffk
+      PS_INSTALL_AUTO: 1
+      PS_DOMAIN: localhost:9461
+      PS_FOLDER_ADMIN: secure-dashboard
+      ADMIN_MAIL: demo@prestashop.com
+      ADMIN_PASSWD: lFi4oj3oFdLI
+    volumes:
+      - ./volumes/prestashop:/var/www/html
+    networks:
+      - prestashop_network
+networks:
+  prestashop_network:
