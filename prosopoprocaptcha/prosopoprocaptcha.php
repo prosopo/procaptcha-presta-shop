@@ -54,10 +54,11 @@ final class ProsopoProcaptcha extends Module
         return '<div class="alert alert-info">Prosopo Procaptcha is active!</div>';
     }
 
-    // admin config page content.
-    public function getContent(): string
+    public function getContent(): void
     {
-        return '<div class="panel"><div class="panel-heading">Prosopo Procaptcha</div><div class="panel-body">GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.</div></div>';
+        $route = $this->get('router')->generate('prosopo_procaptcha_settings');
+
+        Tools::redirectAdmin($route);
     }
 }
 
