@@ -8,14 +8,18 @@ directly here — any changes made will be included in the next official release
 
 ## 1. Installation
 
-Check **for-devs.md** for details.
+Minimum requirements:
+* PHP 7.2+
+* PrestaShop 8.0.0+
+
+Check **for-devs.md** for installation details.
 
 ## 2. Folders Description
 
 This repository includes both the plugin code, and the workflow tools:
 
 - `docker` - Docker Compose config for the test PrestaShop installation, along with volumes and a test DB dump
-- `prosopo-procaptcha` - PrestaShop module
+- `prosopoprocaptcha` - PrestaShop module
 - `tools` - assisting bash scripts
 
 ## 3. Related Resources

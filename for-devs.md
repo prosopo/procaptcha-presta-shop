@@ -9,8 +9,7 @@ Make sure docker is installed, then use the following commands:
 ```bash
 cd docker
 docker compose --file presta-shop.docker-compose.yml up -d --force-recreate
-
-# once
+# only once
 bash ./tools/restore-db.sh
 
 # Presta
@@ -19,6 +18,9 @@ bash ./tools/restore-db.sh
 
 # PHPMyAdmin
 # visit: localhost:9385
+
+# to modify installation files or execute any prestashop CLI commands:
+docker exec -it prestashop /bin/bash
 
 # to stop
 docker compose -f presta-shop.docker-compose.yml down

@@ -15,7 +15,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class ProsopoProcaptcha extends Module
+final class ProsopoProcaptcha extends Module
 {
     public function __construct()
     {
@@ -25,16 +25,17 @@ class ProsopoProcaptcha extends Module
         $this->author = 'Prosopo';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
-            'min' => '1.7.0.0',
+            'min' => '8.0.0',
             'max' => _PS_VERSION_
         ];
         $this->bootstrap = true;
 
         parent::__construct();
 
-        $this->displayName = $this->l('Prosopo Procaptcha');
-        $this->description = $this->l('GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.');  // Updated description
-        $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
+        $this->displayName = $this->trans('Prosopo Procaptcha', [], 'Modules.Prosopoprocaptcha.Admin');
+        $this->description = $this->trans('GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.', [], 'Modules.Prosopoprocaptcha.Admin');
+
+        $this->confirmUninstall = $this->trans('Are you sure you want to uninstall?', [], 'Modules.Prosopoprocaptcha.Admin');
     }
 
     public function install(): bool
@@ -53,6 +54,7 @@ class ProsopoProcaptcha extends Module
         return '<div class="alert alert-info">Prosopo Procaptcha is active!</div>';
     }
 
+    // admin config page content.
     public function getContent(): string
     {
         return '<div class="panel"><div class="panel-heading">Prosopo Procaptcha</div><div class="panel-body">GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.</div></div>';

@@ -1,0 +1,26 @@
+services:
+  _defaults:
+    public: true
+
+  prestashop.module.prosopoprocaptcha.form.type.settings:
+    class: 'Io\Prosopo\Procaptcha\Settings\SettingsFormType'
+    parent: 'form.type.translatable.aware'
+    public: true
+    tags:
+      - { name: form.type }
+  prestashop.module.prosopoprocaptcha.form.settings_configuration:
+    class: 'Io\Prosopo\Procaptcha\Settings\SettingsFormType'
+    arguments:
+      - '@prestashop.adapter.legacy.configuration'
+  prestashop.module.prosopoprocaptcha.form.settings_data_provider:
+    class: 'Io\Prosopo\Procaptcha\Settings\SettingsDataProvider'
+    arguments:
+      - '@prestashop.module.prosopoprocaptcha.form.settings_configuration'
+  prestashop.module.prosopoprocaptcha.form.settings_data_handler:
+    class: 'PrestaShop\PrestaShop\Core\Form\Handler'
+    arguments:
+      - '@form.factory'
+      - '@prestashop.core.hook.dispatcher'
+      - '@prestashop.module.prosopoprocaptcha.form.settings_data_provider'
+      - 'Io\Prosopo\Procaptcha\Settings\SettingsFormType'
+      - 'ProcaptchaSettingsForm'
