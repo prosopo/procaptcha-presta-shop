@@ -45,6 +45,7 @@ services:
       ADMIN_PASSWD: lFi4oj3oFdLI
     volumes:
       - ./volumes/prestashop:/var/www/html
+      - ../prosopoprocaptcha:/var/www/html/modules/prosopoprocaptcha
     networks:
       - prestashop_network
 networks:

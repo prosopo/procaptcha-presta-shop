@@ -27,3 +27,11 @@ docker compose -f presta-shop.docker-compose.yml down
 * DB and FS volumes are configured; so the setup is reused between container launches
 * DB dump is stored separately and should be restored manually (only once; storing a raw
   MySql volume under GIT is not desired)
+
+# 2. Known issues
+
+* Debug mode - there is a [known issue](https://github.com/PrestaShop/PrestaShop/issues/38771) with the debug mode in
+  the dockered PrestaShop, so
+  the current setup has the `config/defines_custom.inc.php` file underscored - to avoid inclusion
+* `prosopoprocaptcha` module doesn't contain neither dash nor underscore
+  as [recommended by the Docs](https://devdocs.prestashop-project.org/8/modules/creation/tutorial/)

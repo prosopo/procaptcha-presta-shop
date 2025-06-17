@@ -1,8 +1,6 @@
 <?php
-declare(strict_types=1);
-
 /**
- * Prosopo Procaptcha World Module
+ * Prosopo Procaptcha Module
  *
  * GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * @copyright Prosopo
  * @license MIT License
  */
+
+declare(strict_types=1);
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -19,10 +19,10 @@ class ProsopoProcaptcha extends Module
 {
     public function __construct()
     {
-        $this->name = 'helloworld';
+        $this->name = 'prosopoprocaptcha';
         $this->tab = 'front_office_features';
         $this->version = '1.0.0';
-        $this->author = 'Your Name';
+        $this->author = 'Prosopo';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
             'min' => '1.7.0.0',
@@ -32,8 +32,8 @@ class ProsopoProcaptcha extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('Hello World');
-        $this->description = $this->l('A simple module to display Hello World.');
+        $this->displayName = $this->l('Prosopo Procaptcha');
+        $this->description = $this->l('GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.');  // Updated description
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
     }
 
@@ -50,11 +50,12 @@ class ProsopoProcaptcha extends Module
 
     public function hookDisplayHeader(): string
     {
-        return '<div class="alert alert-info">Hello World from my first PrestaShop module!</div>';
+        return '<div class="alert alert-info">Prosopo Procaptcha is active!</div>';
     }
 
     public function getContent(): string
     {
-        return '<div class="panel"><div class="panel-heading">Hello World</div><div class="panel-body">This is a simple Hello World module for PrestaShop.</div></div>';
+        return '<div class="panel"><div class="panel-heading">Prosopo Procaptcha</div><div class="panel-body">GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.</div></div>';
     }
 }
+
