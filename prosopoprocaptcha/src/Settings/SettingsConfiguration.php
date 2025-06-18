@@ -6,6 +6,8 @@ namespace Io\Prosopo\Procaptcha\Settings;
 
 use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
+use function WPLake\Typed\boolExtended;
+use function WPLake\Typed\string;
 
 final class SettingsConfiguration implements DataConfigurationInterface
 {
@@ -17,50 +19,94 @@ final class SettingsConfiguration implements DataConfigurationInterface
     const FIELD_IS_ENABLED_FOR_AUTHORIZED = self::PREFIX . 'IS_ENABLED_FOR_AUTHORIZED';
 
     /**
-     * @var array<string,string>
+     * @var array<string,array{formName:string,coerce: callable(mixed $value): mixed}>
      */
-    const RELATIONS = [
-        SettingsFormType::SECRET_KEY => self::FIELD_SECRET_KEY,
-        SettingsFormType::SITE_KEY => self::FIELD_SITE_KEY,
-        SettingsFormType::THEME => self::FIELD_THEME,
-        SettingsFormType::TYPE => self::FIELD_TYPE,
-        SettingsFormType::IS_ENABLED_FOR_AUTHORIZED => self::FIELD_IS_ENABLED_FOR_AUTHORIZED,
-    ];
+    private array $relations;
 
-    /**
-     * @var ConfigurationInterface
-     */
-    private $configuration;
+    private ConfigurationInterface $configuration;
 
     public function __construct(ConfigurationInterface $configuration)
     {
         $this->configuration = $configuration;
+
+        $this->relations = [
+            self::FIELD_SECRET_KEY => [
+                'formName' => SettingsFormType::SECRET_KEY,
+                'coerce' => fn($value) => string($value),
+            ],
+            self::FIELD_SITE_KEY => [
+                'formName' => SettingsFormType::SITE_KEY,
+                'coerce' => fn($value) => string($value),
+            ],
+            self::FIELD_THEME => [
+                'formName' => SettingsFormType::THEME,
+                'coerce' => fn($value) => string($value),
+            ],
+            self::FIELD_TYPE => [
+                'formName' => SettingsFormType::TYPE,
+                'coerce' => fn($value) => string($value),
+            ],
+            self::FIELD_IS_ENABLED_FOR_AUTHORIZED => [
+                'formName' => SettingsFormType::IS_ENABLED_FOR_AUTHORIZED,
+                'coerce' => fn($value) => boolExtended($value),
+            ],
+        ];
     }
 
+    /**
+     * Converts data from the DB to the form-related format.
+     *
+     * @return array<string,mixed> [formName => value]
+     */
     public function getConfiguration(): array
     {
-        return array_map(function ($value) {
-            return $this->configuration->get($value);
-        }, self::RELATIONS);
+        $configuration = [];
+
+        foreach ($this->relations as $fieldName => $relation) {
+            $formName = $relation['formName'];
+            $value = $this->configuration->get($fieldName);
+
+            $configuration[$formName] = $relation['coerce']($value);
+        }
+
+        return $configuration;
     }
 
+    /**
+     * Converts data from the form to the DB-related format.
+     *
+     * @param array<string, mixed> $configuration
+     *
+     * @return string[] Errors.
+     */
     public function updateConfiguration(array $configuration): array
     {
         $errors = [];
 
         if ($this->validateConfiguration($configuration)) {
-            foreach (self::RELATIONS as $key => $value) {
-                $this->configuration->set($value, $configuration[$key]);
+            foreach ($this->relations as $fieldName => $relation) {
+                $formName = $relation['formName'];
+                $rawValue = $configuration[$formName];
+                $value = $relation['coerce']($rawValue);
+
+                $this->configuration->set($fieldName, $value);
             }
         }
 
         return $errors;
     }
 
+    /**
+     * @param array<string, mixed> $configuration
+     *
+     * @return bool
+     */
     public function validateConfiguration(array $configuration): bool
     {
-        foreach (self::RELATIONS as $key => $value) {
-            if (key_exists($key, $configuration)) {
+        foreach ($this->relations as $relation) {
+            $formName = $relation['formName'];
+
+            if (key_exists($formName, $configuration)) {
                 continue;
             }
 

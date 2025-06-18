@@ -6,7 +6,15 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit0c652850505a43a47ed02f72d03c9b2b
 {
+    public static $files = array (
+        '51724525bc2d2aa189b9ba531a1b4e26' => __DIR__ . '/..' . '/wplake/typed/src/functions.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
+        'W' => 
+        array (
+            'WPLake\\Typed\\' => 13,
+        ),
         'I' => 
         array (
             'Io\\Prosopo\\Procaptcha\\' => 22,
@@ -14,6 +22,10 @@ class ComposerStaticInit0c652850505a43a47ed02f72d03c9b2b
     );
 
     public static $prefixDirsPsr4 = array (
+        'WPLake\\Typed\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wplake/typed/src',
+        ),
         'Io\\Prosopo\\Procaptcha\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Settings;
 
+use Io\Prosopo\Procaptcha\Form\PasswordType;
 use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -24,27 +23,36 @@ final class SettingsFormType extends TranslatorAwareType
         $builder
             ->add(self::SECRET_KEY, PasswordType::class, [
                 'label' => $this->trans('Your secret key', 'Modules.Prosopoprocaptcha.Admin'),
+                'required' => true,
+                'always_empty' => false,
             ])
             ->add(self::SITE_KEY, TextType::class, [
                 'label' => $this->trans('Your site key', 'Modules.Prosopoprocaptcha.Admin'),
+                'required' => true,
             ])
             ->add(self::THEME, ChoiceType::class, [
                 'label' => $this->trans('Theme', 'Modules.Prosopoprocaptcha.Admin'),
                 'choices' => [
-                    'light' => $this->trans('Light', 'Modules.Prosopoprocaptcha.Admin'),
-                    'dark' => $this->trans('Dark', 'Modules.Prosopoprocaptcha.Admin'),
+                    $this->trans('Light', 'Modules.Prosopoprocaptcha.Admin') => 'light',
+                    $this->trans('Dark', 'Modules.Prosopoprocaptcha.Admin') => 'dark',
                 ],
             ])
             ->add(self::TYPE, ChoiceType::class, [
                 'label' => $this->trans('Type', 'Modules.Prosopoprocaptcha.Admin'),
                 'choices' => [
-                    'frictionless' => $this->trans('Frictionless', 'Modules.Prosopoprocaptcha.Admin'),
-                    'image' => $this->trans('Image', 'Modules.Prosopoprocaptcha.Admin'),
-                    'pow' => $this->trans('Proof of Work', 'Modules.Prosopoprocaptcha.Admin'),
+                    $this->trans('Frictionless', 'Modules.Prosopoprocaptcha.Admin') => 'frictionless',
+                    $this->trans('Image', 'Modules.Prosopoprocaptcha.Admin') => 'image',
+                    $this->trans('Proof of Work', 'Modules.Prosopoprocaptcha.Admin') => 'pow',
                 ],
             ])
-            ->add(self::IS_ENABLED_FOR_AUTHORIZED, CheckboxType::class, [
+            // there is a CheckboxType::class, but it doesn't match the style and order (label->input) of other field types,
+            // so we use Choice as well
+            ->add(self::IS_ENABLED_FOR_AUTHORIZED, ChoiceType::class, [
                 'label' => $this->trans('Require from authorized users', 'Modules.Prosopoprocaptcha.Admin'),
+                'choices' => [
+                    $this->trans('No', 'Modules.Prosopoprocaptcha.Admin') => '0',
+                    $this->trans('Yes', 'Modules.Prosopoprocaptcha.Admin') => '1',
+                ],
             ]);
     }
 }

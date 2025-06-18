@@ -9,7 +9,7 @@ directly here — any changes made will be included in the next official release
 ## 1. Installation
 
 Minimum requirements:
-* PHP 7.2+
+* PHP 7.4+
 * PrestaShop 8.0.0+
 
 Check **for-devs.md** for installation details.

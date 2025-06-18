@@ -9,10 +9,7 @@ use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
 
 final class SettingsDataProvider implements FormDataProviderInterface
 {
-    /**
-     * @var DataConfigurationInterface
-     */
-    private $settingsConfiguration;
+    private DataConfigurationInterface $settingsConfiguration;
 
     public function __construct(DataConfigurationInterface $demoConfigurationTextDataConfiguration)
     {

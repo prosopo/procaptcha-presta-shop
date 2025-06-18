@@ -6,5 +6,6 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'WPLake\\Typed\\' => array($vendorDir . '/wplake/typed/src'),
     'Io\\Prosopo\\Procaptcha\\' => array($baseDir . '/src'),
 );

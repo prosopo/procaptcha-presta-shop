@@ -11,10 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SettingsController extends FrameworkBundleAdminController
 {
-    /**
-     * @var FormHandlerInterface
-     */
-    private $settingsDataHandler;
+    private FormHandlerInterface $settingsDataHandler;
 
     public function __construct(FormHandlerInterface $settingsDataHandler)
     {
@@ -25,8 +22,6 @@ class SettingsController extends FrameworkBundleAdminController
 
     public function index(Request $request): Response
     {
-        // $settingsDataHandler = $this->get('prestashop.module.prosopoprocaptcha.form.settings_data_handler');
-
         $form = $this->settingsDataHandler->getForm();
         $form->handleRequest($request);
 
@@ -43,7 +38,7 @@ class SettingsController extends FrameworkBundleAdminController
             $this->flashErrors($errors);
         }
 
-        return $this->render('@Modules/prosopoprocaptcha/Settings/settings.twig', [
+        return $this->render('@Modules/prosopoprocaptcha/views/admin/settings.twig', [
             'settingsForm' => $form->createView()
         ]);
     }
