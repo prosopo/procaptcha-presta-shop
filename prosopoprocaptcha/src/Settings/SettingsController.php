@@ -39,7 +39,35 @@ class SettingsController extends FrameworkBundleAdminController
         }
 
         return $this->render('@Modules/prosopoprocaptcha/views/admin/settings.html.twig', [
-            'settingsForm' => $form->createView()
+            'settingsForm' => $form->createView(),
+            'layoutTitle' => 'Prosopo Procaptcha',
+            'help_link' => false,
+            'layoutHeaderToolbarBtn' => [
+                'website' => [
+                    'href' => 'https://prosopo.io/',
+                    'desc' => $this->trans('Visit Website', 'Modules.Prosopoprocaptcha.Admin'),
+                    'target' => '_blank',
+                    'icon' => 'link',
+                    'class' => 'btn-outline-secondary',
+                ],
+                'docs' => [
+                    'href' => 'https://docs.prosopo.io/en/wordpress-plugin/',
+                    'desc' => $this->trans('Open Docs', 'Modules.Prosopoprocaptcha.Admin'),
+                    'target' => '_blank',
+                    'icon' => 'info',
+                    'class' => 'btn-outline-secondary',
+                ],
+                'portal' => [
+                    'href' => 'https://portal.prosopo.io/',
+                    'desc' => $this->trans('Visit Portal', 'Modules.Prosopoprocaptcha.Admin'),
+                    'target' => '_blank',
+                    'icon' => 'key',
+                    'class' => 'btn-outline-secondary',
+                ],
+            ],
+            'headerTabContent' => sprintf('<div style="margin:-15px 20px 20px;">%s</div>',
+                $this->trans('GDPR compliant, privacy friendly and better value captcha.', 'Modules.Prosopoprocaptcha.Admin')
+            ),
         ]);
     }
 }
