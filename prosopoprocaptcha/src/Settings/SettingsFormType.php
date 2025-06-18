@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Io\Prosopo\Procaptcha\Settings;
 
 use Io\Prosopo\Procaptcha\Form\PasswordType;
+use PrestaShopBundle\Form\Admin\Type\SwitchType;
 use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -47,9 +49,7 @@ final class SettingsFormType extends TranslatorAwareType
                     $this->trans('Proof of Work', 'Modules.Prosopoprocaptcha.Admin') => 'pow',
                 ],
             ])
-            // there is a CheckboxType::class, but it doesn't match the style and order (label->input) of other field types,
-            // so we use Choice as well
-            ->add(self::IS_ENABLED_FOR_AUTHORIZED, ChoiceType::class, [
+            ->add(self::IS_ENABLED_FOR_AUTHORIZED, SwitchType::class, [
                 'label' => $this->trans('Require from authorized users', 'Modules.Prosopoprocaptcha.Admin'),
                 'required' => false,
                 'choices' => [
