@@ -32,6 +32,7 @@ final class SettingsFormType extends TranslatorAwareType
             ])
             ->add(self::THEME, ChoiceType::class, [
                 'label' => $this->trans('Theme', 'Modules.Prosopoprocaptcha.Admin'),
+                'required' => true,
                 'choices' => [
                     $this->trans('Light', 'Modules.Prosopoprocaptcha.Admin') => 'light',
                     $this->trans('Dark', 'Modules.Prosopoprocaptcha.Admin') => 'dark',
@@ -39,6 +40,7 @@ final class SettingsFormType extends TranslatorAwareType
             ])
             ->add(self::TYPE, ChoiceType::class, [
                 'label' => $this->trans('Type', 'Modules.Prosopoprocaptcha.Admin'),
+                'required' => true,
                 'choices' => [
                     $this->trans('Frictionless', 'Modules.Prosopoprocaptcha.Admin') => 'frictionless',
                     $this->trans('Image', 'Modules.Prosopoprocaptcha.Admin') => 'image',
@@ -49,6 +51,7 @@ final class SettingsFormType extends TranslatorAwareType
             // so we use Choice as well
             ->add(self::IS_ENABLED_FOR_AUTHORIZED, ChoiceType::class, [
                 'label' => $this->trans('Require from authorized users', 'Modules.Prosopoprocaptcha.Admin'),
+                'required' => false,
                 'choices' => [
                     $this->trans('No', 'Modules.Prosopoprocaptcha.Admin') => '0',
                     $this->trans('Yes', 'Modules.Prosopoprocaptcha.Admin') => '1',

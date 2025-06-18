@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -46,9 +48,17 @@ final class ProsopoProcaptcha extends Module
 
     public function uninstall(): bool
     {
+        /**
+         * @var SettingsConfiguration $settingsConfiguration
+         */
+        $settingsConfiguration = $this->get('prestashop.module.prosopoprocaptcha.form.settings_configuration');
+
+        $settingsConfiguration->removeAllFields();
+
         return parent::uninstall();
     }
 
+    // fixme
     public function hookDisplayHeader(): string
     {
         return '<div class="alert alert-info">Prosopo Procaptcha is active!</div>';

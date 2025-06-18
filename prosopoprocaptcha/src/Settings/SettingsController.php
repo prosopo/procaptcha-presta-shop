@@ -38,7 +38,7 @@ class SettingsController extends FrameworkBundleAdminController
             $this->flashErrors($errors);
         }
 
-        return $this->render('@Modules/prosopoprocaptcha/views/admin/settings.twig', [
+        return $this->render('@Modules/prosopoprocaptcha/views/admin/settings.html.twig', [
             'settingsForm' => $form->createView()
         ]);
     }

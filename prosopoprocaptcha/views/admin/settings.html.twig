@@ -1,0 +1,38 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+    {{ form_start(settingsForm) }}
+    <div class="card">
+        <h3 class="card-header">
+            <i class="material-icons">tune</i> {{ 'Procaptcha settings'|trans({}, 'Modules.Prosopoprocaptcha.Admin') }}
+        </h3>
+        <div class="card-body">
+            <div class="form-wrapper prosopoprocaptcha__settings">
+                {{ form_widget(settingsForm) }}
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary float-right" id="save-button">
+                    {{ 'Save'|trans({}, 'Admin.Actions') }}
+                </button>
+            </div>
+        </div>
+    </div>
+    {{ form_end(settingsForm) }}
+
+    <style>
+        .prosopoprocaptcha__settings {
+            label.required::before {
+                position: relative;
+                font-size: 14px;
+                line-height: 12px;
+                color: red;
+                content: "*";
+                font-weight: 400;
+                margin-right: 3px;
+            }
+        }
+    </style>
+{% endblock %}
+

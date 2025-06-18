@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Io\Prosopo\Procaptcha\Settings;
 
 use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
-use PrestaShop\PrestaShop\Core\ConfigurationInterface;
+use PrestaShop\PrestaShop\Core\Domain\Configuration\ShopConfigurationInterface;
 use function WPLake\Typed\boolExtended;
 use function WPLake\Typed\string;
 
@@ -23,9 +23,9 @@ final class SettingsConfiguration implements DataConfigurationInterface
      */
     private array $relations;
 
-    private ConfigurationInterface $configuration;
+    private ShopConfigurationInterface $configuration;
 
-    public function __construct(ConfigurationInterface $configuration)
+    public function __construct(ShopConfigurationInterface $configuration)
     {
         $this->configuration = $configuration;
 
@@ -114,5 +114,12 @@ final class SettingsConfiguration implements DataConfigurationInterface
         }
 
         return true;
+    }
+
+    public function removeAllFields(): void
+    {
+        foreach (array_keys($this->relations) as $fieldName) {
+            $this->configuration->remove($fieldName);
+        }
     }
 }
