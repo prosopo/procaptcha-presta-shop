@@ -5,6 +5,7 @@ services:
   Io\Prosopo\Procaptcha\Settings\SettingsController:
     arguments:
       - '@prestashop.module.prosopoprocaptcha.form.settings_data_handler'
+      - '@prestashop.module.prosopoprocaptcha.form.settings_configuration'
 
   prestashop.module.prosopoprocaptcha.form.type.settings_form_type:
     class: 'Io\Prosopo\Procaptcha\Settings\SettingsFormType'

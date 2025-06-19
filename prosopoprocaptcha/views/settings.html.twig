@@ -2,15 +2,18 @@
 
 {% block content %}
     {{ form_start(settingsForm) }}
+
     <div class="card">
         <h3 class="card-header">
             <i class="material-icons">tune</i> {{ 'Procaptcha settings'|trans({}, 'Modules.Prosopoprocaptcha.Admin') }}
         </h3>
+
         <div class="card-body">
             <div class="form-wrapper prosopoprocaptcha__settings">
                 {{ form_widget(settingsForm) }}
             </div>
         </div>
+
         <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
                 <a href="{{ path('admin_module_manage') }}" class="btn btn-outline-secondary">
@@ -23,7 +26,24 @@
             </div>
         </div>
     </div>
+
     {{ form_end(settingsForm) }}
+
+    {% if widgetPreview %}
+        <div class="card">
+            <h3 class="card-header">
+                <i class="material-icons">preview</i> {{ 'Widget preview'|trans({}, 'Modules.Prosopoprocaptcha.Admin') }}
+            </h3>
+
+            <div class="card-body">
+                <p>
+                    {{ 'If the credentials are valid, you should be able to complete the captcha below:'|trans({}, 'Modules.Prosopoprocaptcha.Admin') }}
+                </p>
+
+                {{ widgetPreview|raw }}
+            </div>
+        </div>
+    {% endif %}
 
     <style>
         .prosopoprocaptcha__settings {

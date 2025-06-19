@@ -6,18 +6,21 @@ namespace Io\Prosopo\Procaptcha\Settings;
 
 use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SettingsController extends FrameworkBundleAdminController
 {
     private FormHandlerInterface $settingsDataHandler;
+    private SettingsConfiguration $settingsConfiguration;
 
-    public function __construct(FormHandlerInterface $settingsDataHandler)
+    public function __construct(FormHandlerInterface $settingsDataHandler, SettingsConfiguration $settingsConfiguration)
     {
         parent::__construct();
 
         $this->settingsDataHandler = $settingsDataHandler;
+        $this->settingsConfiguration = $settingsConfiguration;
     }
 
     public function index(Request $request): Response
@@ -38,7 +41,17 @@ class SettingsController extends FrameworkBundleAdminController
             $this->flashErrors($errors);
         }
 
-        return $this->render('@Modules/prosopoprocaptcha/views/admin/settings.html.twig', [
+        return $this->renderSettingsPage($form);
+    }
+
+    private function renderSettingsPage(FormInterface $form): Response
+    {
+        // fixme pass attributes.
+        $widgetPreview = $this->settingsConfiguration->getField(SettingsConfiguration::FIELD_SITE_KEY) ?
+            (string)$this->render('@Modules/prosopoprocaptcha/views/widget.html.twig')->getContent() :
+            '';
+
+        $args = [
             'settingsForm' => $form->createView(),
             'layoutTitle' => 'Prosopo Procaptcha',
             'help_link' => false,
@@ -68,6 +81,9 @@ class SettingsController extends FrameworkBundleAdminController
             'headerTabContent' => sprintf('<div style="margin:-15px 20px 20px;">%s</div>',
                 $this->trans('GDPR compliant, privacy friendly and better value captcha.', 'Modules.Prosopoprocaptcha.Admin')
             ),
-        ]);
+            'widgetPreview' => $widgetPreview,
+        ];
+
+        return $this->render('@Modules/prosopoprocaptcha/views/settings.html.twig', $args);
     }
 }

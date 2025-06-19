@@ -122,4 +122,19 @@ final class SettingsConfiguration implements DataConfigurationInterface
             $this->configuration->remove($fieldName);
         }
     }
+
+    /**
+     * @return mixed
+     */
+    public function getField(string $fieldName)
+    {
+        if (key_exists($fieldName, $this->relations)) {
+            $value = $this->configuration->get($fieldName);
+            $relation = $this->relations[$fieldName];
+
+            return $relation['coerce']($value);
+        }
+
+        return null;
+    }
 }
