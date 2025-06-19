@@ -39,6 +39,15 @@ final class ProsopoProcaptcha extends Module
 
         parent::__construct();
 
+        // fixme remove after active development is complete.
+        foreach (self::HOOKS as $hook) {
+            if ($this->isRegisteredInHook($hook)) {
+                continue;
+            }
+
+            $this->registerHook($hook);
+        }
+
         $this->displayName = $this->trans('Prosopo Procaptcha', [], 'Modules.Prosopoprocaptcha.Admin');
         $this->description = $this->trans('GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.', [], 'Modules.Prosopoprocaptcha.Admin');
 
@@ -69,17 +78,19 @@ final class ProsopoProcaptcha extends Module
         return '<div class="alert alert-info">Prosopo Procaptcha is active!</div>';
     }
 
-   /* fixme public function hookActionFrontControllerSetMedia()
-    {
-        $this->context->controller->registerJavascript(
-            'mailalerts-js',
-            'modules/' . $this->name . '/js/mailalerts.js'
-        );
-    }*/
+    /* fixme public function hookActionFrontControllerSetMedia()
+     {
+         $this->context->controller->registerJavascript(
+             'mailalerts-js',
+             'modules/' . $this->name . '/js/mailalerts.js'
+         );
+     }*/
 
     public function hookActionAdminControllerSetMedia(array $params)
     {
-        // fixme
+        // fixme AdminLegacyLayoutControllerCore $controllerClass = get_class($this->context->controller);
+
+        // fixme limit to our settings page only.
         $this->context->controller->addJs($this->getPathUri() . 'dist/widget-integration.min.js');
     }
 
