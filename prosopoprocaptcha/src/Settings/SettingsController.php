@@ -15,7 +15,9 @@ class SettingsController extends FrameworkBundleAdminController
     private FormHandlerInterface $settingsDataHandler;
     private SettingsConfiguration $settingsConfiguration;
 
-    public function __construct(FormHandlerInterface $settingsDataHandler, SettingsConfiguration $settingsConfiguration)
+    public function __construct(
+        FormHandlerInterface  $settingsDataHandler,
+        SettingsConfiguration $settingsConfiguration)
     {
         parent::__construct();
 

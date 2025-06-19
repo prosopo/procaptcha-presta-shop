@@ -19,6 +19,11 @@ if (!defined('_PS_VERSION_')) {
 
 final class ProsopoProcaptcha extends Module
 {
+    const HOOKS = [
+        'displayHeader',
+        'actionAdminControllerSetMedia',
+    ];
+
     public function __construct()
     {
         $this->name = 'prosopoprocaptcha';
@@ -43,7 +48,7 @@ final class ProsopoProcaptcha extends Module
     public function install(): bool
     {
         return parent::install() &&
-            $this->registerHook('displayHeader');
+            $this->registerHook(self::HOOKS);
     }
 
     public function uninstall(): bool
@@ -63,6 +68,21 @@ final class ProsopoProcaptcha extends Module
     {
         return '<div class="alert alert-info">Prosopo Procaptcha is active!</div>';
     }
+
+   /* fixme public function hookActionFrontControllerSetMedia()
+    {
+        $this->context->controller->registerJavascript(
+            'mailalerts-js',
+            'modules/' . $this->name . '/js/mailalerts.js'
+        );
+    }*/
+
+    public function hookActionAdminControllerSetMedia(array $params)
+    {
+        // fixme
+        $this->context->controller->addJs($this->getPathUri() . 'dist/widget-integration.min.js');
+    }
+
 
     public function getContent(): void
     {
