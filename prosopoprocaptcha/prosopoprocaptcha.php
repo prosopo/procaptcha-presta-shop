@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
+use Io\Prosopo\Procaptcha\Widget;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -20,8 +21,8 @@ if (!defined('_PS_VERSION_')) {
 final class ProsopoProcaptcha extends Module
 {
     const HOOKS = [
-        'displayHeader',
         'actionAdminControllerSetMedia',
+        'createAccountForm',
     ];
 
     public function __construct()
@@ -40,7 +41,7 @@ final class ProsopoProcaptcha extends Module
         parent::__construct();
 
         // fixme remove after active development is complete.
-        foreach (self::HOOKS as $hook) {
+        foreach (array_diff(self::HOOKS, ['createAccountForm']) as $hook) {
             if ($this->isRegisteredInHook($hook)) {
                 continue;
             }
@@ -72,10 +73,14 @@ final class ProsopoProcaptcha extends Module
         return parent::uninstall();
     }
 
-    // fixme
-    public function hookDisplayHeader(): string
+    public function hookCreateAccountForm(): string
     {
-        return '<div class="alert alert-info">Prosopo Procaptcha is active!</div>';
+        // fixme only if enabled.
+        // services aren't available here... so $this->get() returns null...
+
+        return '<prosopo-procaptcha-presta-widget class="prosopo-procaptcha-presta-widget" style="display: block;">
+    <div class="prosopo-procaptcha"></div>
+</prosopo-procaptcha-presta-widget>';
     }
 
     /* fixme public function hookActionFrontControllerSetMedia()

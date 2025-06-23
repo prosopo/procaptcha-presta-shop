@@ -56,7 +56,7 @@ class SettingsController extends FrameworkBundleAdminController
 
     private function renderSettingsPage(FormInterface $form): Response
     {
-        $siteKey = $this->settingsConfiguration->getField(SettingsConfiguration::FIELD_SITE_KEY);
+        $siteKey = $this->settingsConfiguration::getField(SettingsConfiguration::FIELD_SITE_KEY);
 
         $widgetPreview = $siteKey ?
             $this->widget->renderWidget() :
@@ -98,7 +98,6 @@ class SettingsController extends FrameworkBundleAdminController
             'widgetPreview' => $widgetPreview,
             'widgetScripts' => $widgetScripts,
         ];
-
 
         $html = $this->views->render('settings', $args);
 

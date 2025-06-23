@@ -8,40 +8,27 @@ use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
 
 final class Widget
 {
-    private string $viewsFolderName;
-    private Views $views;
-    private SettingsConfiguration $settingsConfiguration;
-
-    public function __construct(string $viewsFolderName, Views $views, SettingsConfiguration $settingsConfiguration)
+    public static function renderWidget(): string
     {
-        $this->viewsFolderName = $viewsFolderName;
-        $this->views = $views;
-        $this->settingsConfiguration = $settingsConfiguration;
+        return '<prosopo-procaptcha-presta-widget class="prosopo-procaptcha-presta-widget" style="display: block;">
+    <div class="prosopo-procaptcha"></div>
+</prosopo-procaptcha-presta-widget>';
     }
 
-    public function renderWidget(): string
+    public static function renderWidgetScripts(): string
     {
-        return $this->render('widget');
-    }
+        $options=[
+            'siteKey' => SettingsConfiguration::getField(SettingsConfiguration::FIELD_SITE_KEY),
+            'theme' => SettingsConfiguration::getField(SettingsConfiguration::FIELD_THEME),
+            'captchaType' => SettingsConfiguration::getField(SettingsConfiguration::FIELD_TYPE),
+        ];
 
-    public function renderWidgetScripts(): string
-    {
-        return $this->render('widget-scripts', [
-            'captchaOptions' => [
-                'siteKey' => $this->settingsConfiguration->getField(SettingsConfiguration::FIELD_SITE_KEY),
-                'theme' => $this->settingsConfiguration->getField(SettingsConfiguration::FIELD_THEME),
-                'captchaType' => $this->settingsConfiguration->getField(SettingsConfiguration::FIELD_TYPE),
-            ],
-        ]);
-    }
-
-    /**
-     * @param array<string,mixed> $arguments
-     */
-    protected function render(string $viewName, array $arguments = []): string
-    {
-        $fullViewName = sprintf('%s/%s', $this->viewsFolderName, $viewName);
-
-        return $this->views->render($fullViewName, $arguments);
+        // fixme migrate to static.
+        return '<script type="text/javascript">
+    window.procaptchaPrestaAttributes = {{ captchaOptions|json_encode|raw }}
+</script>
+<script type="text/javascript" async defer
+        src="{{ asset('../modules/prosopoprocaptcha/dist/widget-integration.min.js') }}">
+</script>';
     }
 }

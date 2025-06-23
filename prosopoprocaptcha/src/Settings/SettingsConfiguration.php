@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Settings;
 
+use Configuration;
 use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
 use PrestaShop\PrestaShop\Core\Domain\Configuration\ShopConfigurationInterface;
 use function WPLake\Typed\boolExtended;
@@ -29,9 +30,33 @@ final class SettingsConfiguration implements DataConfigurationInterface
     {
         $this->configuration = $configuration;
 
-        $this->relations = [
-            self::FIELD_SECRET_KEY => [
-                'formName' => SettingsFormType::SECRET_KEY,
+        $this->relations = self::getRelations();
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getField(string $fieldName)
+    {
+        $relations = self::getRelations();
+
+        if (key_exists($fieldName, $relations)) {
+            $value = Configuration::get($fieldName);
+            $relation = $relations[$fieldName];
+
+            return $relation['coerce']($value);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array<string,array{formName:string,coerce: callable(mixed $value): mixed}>
+     */
+    protected static function getRelations(): array
+    {
+        return [
+            self::FIELD_SECRET_KEY => ['formName' => SettingsFormType::SECRET_KEY,
                 'coerce' => fn($value) => string($value),
             ],
             self::FIELD_SITE_KEY => [
@@ -121,20 +146,5 @@ final class SettingsConfiguration implements DataConfigurationInterface
         foreach (array_keys($this->relations) as $fieldName) {
             $this->configuration->remove($fieldName);
         }
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getField(string $fieldName)
-    {
-        if (key_exists($fieldName, $this->relations)) {
-            $value = $this->configuration->get($fieldName);
-            $relation = $this->relations[$fieldName];
-
-            return $relation['coerce']($value);
-        }
-
-        return null;
     }
 }

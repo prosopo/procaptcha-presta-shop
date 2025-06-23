@@ -12,9 +12,13 @@ docker compose --file presta-shop.docker-compose.yml up -d --force-recreate
 # only once
 bash ./tools/restore-db.sh
 
-# Presta
+# Presta admin
 # visit: localhost:9461/secure-dashboard 
 # use: demo@prestashop.com / lFi4oj3oFdLI
+
+# Presta user
+# visit: http://localhost:9461/login
+# use procaptcha / procaptcha [email is procaptcha@prestashop.com]
 
 # PHPMyAdmin
 # visit: localhost:9385
