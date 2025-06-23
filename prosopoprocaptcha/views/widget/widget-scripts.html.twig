@@ -1,7 +1,7 @@
 <script type="module" async defer src="https://js.prosopo.io/js/procaptcha.bundle.js">
 </script>
 <script type="text/javascript">
-    window.prosopoProcaptcha = {{ captchaOptions|json_encode|raw }}
+    window.procaptchaPrestaAttributes = {{ captchaOptions|json_encode|raw }}
 </script>
 <script type="text/javascript" async defer
         src="{{ asset('../modules/prosopoprocaptcha/dist/widget-integration.min.js') }}">

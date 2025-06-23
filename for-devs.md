@@ -30,7 +30,14 @@ docker compose -f presta-shop.docker-compose.yml down
 * DB dump is stored separately and should be restored manually (only once; storing a raw
   MySql volume under GIT is not desired)
 
-# 2. Known issues
+# 2. Assets management
+
+```bash
+cd prosopoprocaptcha/assets
+yarn build
+```
+
+# 3. Known issues
 
 * Debug mode - there is a [known issue](https://github.com/PrestaShop/PrestaShop/issues/38771) with the debug mode in
   the dockered PrestaShop, so

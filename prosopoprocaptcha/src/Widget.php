@@ -30,7 +30,7 @@ final class Widget
             'captchaOptions' => [
                 'siteKey' => $this->settingsConfiguration->getField(SettingsConfiguration::FIELD_SITE_KEY),
                 'theme' => $this->settingsConfiguration->getField(SettingsConfiguration::FIELD_THEME),
-                'type' => $this->settingsConfiguration->getField(SettingsConfiguration::FIELD_TYPE),
+                'captchaType' => $this->settingsConfiguration->getField(SettingsConfiguration::FIELD_TYPE),
             ],
         ]);
     }

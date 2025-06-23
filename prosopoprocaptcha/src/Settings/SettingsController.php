@@ -99,7 +99,9 @@ class SettingsController extends FrameworkBundleAdminController
             'widgetScripts' => $widgetScripts,
         ];
 
-        // fixme
-        return $this->views->render('settings', $args);
+
+        $html = $this->views->render('settings', $args);
+
+        return new Response($html);
     }
 }

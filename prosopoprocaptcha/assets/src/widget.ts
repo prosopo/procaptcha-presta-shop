@@ -5,7 +5,7 @@ declare global {
         procaptcha: {
             render: (element: HTMLElement, attributes: object) => () => void;
         };
-        procaptchaWpAttributes: object;
+        procaptchaPrestaAttributes: object;
     }
 }
 
@@ -33,6 +33,19 @@ export const createWidget = (settings: WidgetSettings, logger: Logger) => {
         logger.warning("Inner captcha container is missing.", settings);
     }
 };
+
+export const getGlobalWidgetAttributes = (logger: Logger): object => {
+    if (
+        window.hasOwnProperty("procaptchaPrestaAttributes") &&
+        "object" === typeof window["procaptchaPrestaAttributes"]
+    ) {
+        return window["procaptchaPrestaAttributes"];
+    }
+
+    logger.warning("Global procaptcha widget attributes are not available.");
+
+    return {};
+}
 
 const getProcaptchaServiceCallback = ():
     | ((element: HTMLElement, args: object) => () => void)
