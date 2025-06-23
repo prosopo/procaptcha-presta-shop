@@ -88,10 +88,15 @@ final class ProsopoProcaptcha extends Module
 
     public function hookActionAdminControllerSetMedia(array $params)
     {
-        // fixme AdminLegacyLayoutControllerCore $controllerClass = get_class($this->context->controller);
+        return;// fixme
+        $controller = $this->context->controller;
 
-        // fixme limit to our settings page only.
-        $this->context->controller->addJs($this->getPathUri() . 'dist/widget-integration.min.js');
+        if ('ProsopoProcaptchaSettings' === $controller->controller_name) {
+            // fixme
+            $this->context->controller->addJs('https://js.prosopo.io/js/procaptcha.bundle.js');
+            $controller->addJs($this->getPathUri() . 'dist/widget-integration.min.js');
+        }
+
     }
 
 

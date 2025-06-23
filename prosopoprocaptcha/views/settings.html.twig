@@ -60,3 +60,8 @@
     </style>
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {{ widgetScripts|raw }}
+{% endblock %}
+

@@ -3,6 +3,6 @@ prosopo_procaptcha_settings:
   methods: [ GET, POST ]
   defaults:
     _controller: 'Io\Prosopo\Procaptcha\Settings\SettingsController::index'
-    # Needed to work with tab system
-    _legacy_controller: AdminDemoSymfonyFormSimple
-    _legacy_link: AdminDemoSymfonyFormSimple
+    # Needed to work with the tab system
+    _legacy_controller: ProsopoProcaptchaSettings
+    _legacy_link: ProsopoProcaptchaSettings

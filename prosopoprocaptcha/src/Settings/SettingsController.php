@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Settings;
 
+use Io\Prosopo\Procaptcha\Views;
+use Io\Prosopo\Procaptcha\Widget;
 use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\Form\FormInterface;
@@ -14,15 +16,21 @@ class SettingsController extends FrameworkBundleAdminController
 {
     private FormHandlerInterface $settingsDataHandler;
     private SettingsConfiguration $settingsConfiguration;
+    private Widget $widget;
+    private Views $views;
 
     public function __construct(
         FormHandlerInterface  $settingsDataHandler,
-        SettingsConfiguration $settingsConfiguration)
+        SettingsConfiguration $settingsConfiguration,
+        Widget                $widget,
+        Views                 $views)
     {
         parent::__construct();
 
         $this->settingsDataHandler = $settingsDataHandler;
         $this->settingsConfiguration = $settingsConfiguration;
+        $this->widget = $widget;
+        $this->views = $views;
     }
 
     public function index(Request $request): Response
@@ -48,9 +56,13 @@ class SettingsController extends FrameworkBundleAdminController
 
     private function renderSettingsPage(FormInterface $form): Response
     {
-        // fixme pass attributes.
-        $widgetPreview = $this->settingsConfiguration->getField(SettingsConfiguration::FIELD_SITE_KEY) ?
-            (string)$this->render('@Modules/prosopoprocaptcha/views/widget.html.twig')->getContent() :
+        $siteKey = $this->settingsConfiguration->getField(SettingsConfiguration::FIELD_SITE_KEY);
+
+        $widgetPreview = $siteKey ?
+            $this->widget->renderWidget() :
+            '';
+        $widgetScripts = $siteKey ?
+            $this->widget->renderWidgetScripts() :
             '';
 
         $args = [
@@ -84,8 +96,10 @@ class SettingsController extends FrameworkBundleAdminController
                 $this->trans('GDPR compliant, privacy friendly and better value captcha.', 'Modules.Prosopoprocaptcha.Admin')
             ),
             'widgetPreview' => $widgetPreview,
+            'widgetScripts' => $widgetScripts,
         ];
 
-        return $this->render('@Modules/prosopoprocaptcha/views/settings.html.twig', $args);
+        // fixme
+        return $this->views->render('settings', $args);
     }
 }

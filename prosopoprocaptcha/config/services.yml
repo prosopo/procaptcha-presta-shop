@@ -6,6 +6,8 @@ services:
     arguments:
       - '@prestashop.module.prosopoprocaptcha.form.settings_data_handler'
       - '@prestashop.module.prosopoprocaptcha.form.settings_configuration'
+      - '@prestashop.module.prosopoprocaptcha.widget'
+      - '@prestashop.module.prosopoprocaptcha.views'
 
   prestashop.module.prosopoprocaptcha.form.type.settings_form_type:
     class: 'Io\Prosopo\Procaptcha\Settings\SettingsFormType'
@@ -32,3 +34,16 @@ services:
       - '@prestashop.module.prosopoprocaptcha.form.settings_data_provider'
       - 'Io\Prosopo\Procaptcha\Settings\SettingsFormType'
       - 'ProcaptchaSettingsForm'
+
+  prestashop.module.prosopoprocaptcha.widget:
+    class: 'Io\Prosopo\Procaptcha\Widget'
+    arguments:
+      - 'widget'
+      - '@prestashop.module.prosopoprocaptcha.views'
+      - '@prestashop.module.prosopoprocaptcha.form.settings_configuration'
+
+  prestashop.module.prosopoprocaptcha.views:
+    class: 'Io\Prosopo\Procaptcha\Views'
+    arguments:
+      - '@@Modules/prosopoprocaptcha/views'
+      - '@twig'
