@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
 use Io\Prosopo\Procaptcha\Widget;
+use function WPLake\Typed\string;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -23,6 +24,15 @@ final class ProsopoProcaptcha extends Module
     const HOOKS = [
         'createAccountForm',
         'actionSubmitAccountBefore',
+        'actionOutputHTMLBefore',
+    ];
+
+    // straight template overriding isn't supported: https://www.prestashop.com/forums/topic/1077918-override-theme-template-from-module-ps17/
+    const WIDGET_PAGE_INJECTIONS = [
+        // controller name => injection (before/after)
+        'contact' => [
+            'before' => '<footer class="form-footer',
+        ],
     ];
 
     public function __construct()
@@ -53,6 +63,7 @@ final class ProsopoProcaptcha extends Module
         $this->description = $this->trans('GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.', [], 'Modules.Prosopoprocaptcha.Admin');
 
         $this->confirmUninstall = $this->trans('Are you sure you want to uninstall?', [], 'Modules.Prosopoprocaptcha.Admin');
+
     }
 
     public function install(): bool
@@ -88,6 +99,7 @@ final class ProsopoProcaptcha extends Module
        );
    }*/
 
+    // the hook is defined in themes/classic/templates/customer/_partials/customer-form.tpl
     public function hookCreateAccountForm(): string
     {
         $isOnRegistrationForm = SettingsConfiguration::getField(
@@ -96,17 +108,7 @@ final class ProsopoProcaptcha extends Module
 
         if ($isOnRegistrationForm) {
             // services aren't available here... so $this->get() returns null...
-
-            $widget = Widget::renderWidget() .
-                Widget::renderWidgetScripts();
-
-            return sprintf('<div class="prosopo-procaptcha__row" 
-style="margin: 0 0 20px;display:flex;justify-content: center;">
-<div class="prosopo-procaptcha__field" style="max-width:300px; width: 100%%;">
-%s
-</div>
-</div>',
-                $widget);
+            return $this->renderWidget();
         }
 
         return '';
@@ -128,5 +130,43 @@ style="margin: 0 0 20px;display:flex;justify-content: center;">
         return false;
 
     }
+
+    /**
+     * @param array<string,mixed> $arguments
+     */
+    public function hookActionOutputHTMLBefore(array $arguments): void
+    {
+        $controllerName = $this->context->controller->php_self;
+
+        if (key_exists($controllerName, self::WIDGET_PAGE_INJECTIONS)) {
+            $injection = self::WIDGET_PAGE_INJECTIONS[$controllerName];
+
+            $before = string($injection, 'before');
+            $after = string($injection, 'after');
+
+            $html = string($arguments, 'html');
+
+            $search = $after . $before;
+            $replacement = $after . $this->renderWidget() . $before;
+
+            // no return, as 'html' key is passed as a reference (aka pointer)
+            $arguments['html'] = str_replace($search, $replacement, $html);
+        }
+    }
+
+    protected function renderWidget(): string
+    {
+        $widget = Widget::renderWidget() .
+            Widget::renderWidgetScripts();
+
+        return sprintf('<div class="prosopo-procaptcha__row" 
+style="margin: 0 0 20px;display:flex;justify-content: center;">
+<div class="prosopo-procaptcha__field" style="max-width:300px; width: 100%%;">
+%s
+</div>
+</div>',
+            $widget);
+    }
+
 }
 
