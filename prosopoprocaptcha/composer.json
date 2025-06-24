@@ -9,7 +9,8 @@
   ],
   "require": {
     "php": ">=7.4.0",
-    "wplake/typed": "^1.2"
+    "wplake/typed": "^1.2",
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {

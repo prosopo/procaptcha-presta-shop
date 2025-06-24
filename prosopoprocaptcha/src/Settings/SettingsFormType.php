@@ -8,7 +8,6 @@ use Io\Prosopo\Procaptcha\Form\PasswordType;
 use PrestaShopBundle\Form\Admin\Type\SwitchType;
 use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -18,7 +17,7 @@ final class SettingsFormType extends TranslatorAwareType
     const SITE_KEY = 'site_key';
     const THEME = 'theme';
     const TYPE = 'type';
-    const IS_ENABLED_FOR_AUTHORIZED = 'is_enabled_for_authorized';
+    const IS_ON_REGISTRATION_FORM = 'is_on_registration_form';
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -49,8 +48,8 @@ final class SettingsFormType extends TranslatorAwareType
                     $this->trans('Proof of Work', 'Modules.Prosopoprocaptcha.Admin') => 'pow',
                 ],
             ])
-            ->add(self::IS_ENABLED_FOR_AUTHORIZED, SwitchType::class, [
-                'label' => $this->trans('Require from authorized users', 'Modules.Prosopoprocaptcha.Admin'),
+            ->add(self::IS_ON_REGISTRATION_FORM, SwitchType::class, [
+                'label' => $this->trans('Registration form protection', 'Modules.Prosopoprocaptcha.Admin'),
                 'required' => false,
                 'choices' => [
                     $this->trans('No', 'Modules.Prosopoprocaptcha.Admin') => '0',

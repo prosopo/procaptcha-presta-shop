@@ -14,7 +14,12 @@ Minimum requirements:
 
 Check **for-devs.md** for installation details.
 
-## 2. Folders Description
+## 2. Supported forms
+
+* `/registration`
+* `/login`
+
+## 3. Folders Description
 
 This repository includes both the plugin code, and the workflow tools:
 
@@ -22,11 +27,11 @@ This repository includes both the plugin code, and the workflow tools:
 - `prosopoprocaptcha` - PrestaShop module
 - `tools` - assisting bash scripts
 
-## 3. Related Resources
+## 4. Related Resources
 
 * [Prosopo Procaptcha Website](https://prosopo.io/)
 
-## 4. Contribution
+## 5. Contribution
 
 We would be excited if you decide to contribute 🤝
 

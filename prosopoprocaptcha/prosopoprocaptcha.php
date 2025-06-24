@@ -21,8 +21,8 @@ if (!defined('_PS_VERSION_')) {
 final class ProsopoProcaptcha extends Module
 {
     const HOOKS = [
-        'actionAdminControllerSetMedia',
         'createAccountForm',
+        'actionSubmitAccountBefore',
     ];
 
     public function __construct()
@@ -73,43 +73,60 @@ final class ProsopoProcaptcha extends Module
         return parent::uninstall();
     }
 
-    public function hookCreateAccountForm(): string
-    {
-        // fixme only if enabled.
-        // services aren't available here... so $this->get() returns null...
-
-        return '<prosopo-procaptcha-presta-widget class="prosopo-procaptcha-presta-widget" style="display: block;">
-    <div class="prosopo-procaptcha"></div>
-</prosopo-procaptcha-presta-widget>';
-    }
-
-    /* fixme public function hookActionFrontControllerSetMedia()
-     {
-         $this->context->controller->registerJavascript(
-             'mailalerts-js',
-             'modules/' . $this->name . '/js/mailalerts.js'
-         );
-     }*/
-
-    public function hookActionAdminControllerSetMedia(array $params)
-    {
-        return;// fixme
-        $controller = $this->context->controller;
-
-        if ('ProsopoProcaptchaSettings' === $controller->controller_name) {
-            // fixme
-            $this->context->controller->addJs('https://js.prosopo.io/js/procaptcha.bundle.js');
-            $controller->addJs($this->getPathUri() . 'dist/widget-integration.min.js');
-        }
-
-    }
-
-
     public function getContent(): void
     {
         $route = $this->get('router')->generate('prosopo_procaptcha_settings');
 
         Tools::redirectAdmin($route);
+    }
+
+    /* fixme public function hookActionFrontControllerSetMedia()
+   {
+       $this->context->controller->registerJavascript(
+           'mailalerts-js',
+           'modules/' . $this->name . '/js/mailalerts.js'
+       );
+   }*/
+
+    public function hookCreateAccountForm(): string
+    {
+        $isOnRegistrationForm = SettingsConfiguration::getField(
+            SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM
+        );
+
+        if ($isOnRegistrationForm) {
+            // services aren't available here... so $this->get() returns null...
+
+            $widget = Widget::renderWidget() .
+                Widget::renderWidgetScripts();
+
+            return sprintf('<div class="prosopo-procaptcha__row" 
+style="margin: 0 0 20px;display:flex;justify-content: center;">
+<div class="prosopo-procaptcha__field" style="max-width:300px; width: 100%%;">
+%s
+</div>
+</div>',
+                $widget);
+        }
+
+        return '';
+    }
+
+    public function hookActionSubmitAccountBefore(): bool
+    {
+        $isOnRegistrationForm = SettingsConfiguration::getField(
+            SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM
+        );
+
+        if (!$isOnRegistrationForm ||
+            Widget::verifyToken()) {
+            return true;
+        }
+
+        $this->context->controller->errors[] = Widget::getValidationError();
+
+        return false;
+
     }
 }
 

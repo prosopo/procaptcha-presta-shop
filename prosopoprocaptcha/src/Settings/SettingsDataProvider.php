@@ -11,9 +11,9 @@ final class SettingsDataProvider implements FormDataProviderInterface
 {
     private DataConfigurationInterface $settingsConfiguration;
 
-    public function __construct(DataConfigurationInterface $demoConfigurationTextDataConfiguration)
+    public function __construct(DataConfigurationInterface $settingsConfiguration)
     {
-        $this->settingsConfiguration = $demoConfigurationTextDataConfiguration;
+        $this->settingsConfiguration = $settingsConfiguration;
     }
 
     public function getData(): array

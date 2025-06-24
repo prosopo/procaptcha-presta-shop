@@ -17,7 +17,7 @@ final class SettingsConfiguration implements DataConfigurationInterface
     const FIELD_SITE_KEY = self::PREFIX . 'SITE_KEY';
     const FIELD_THEME = self::PREFIX . 'THEME';
     const FIELD_TYPE = self::PREFIX . 'TYPE';
-    const FIELD_IS_ENABLED_FOR_AUTHORIZED = self::PREFIX . 'IS_ENABLED_FOR_AUTHORIZED';
+    const FIELD_IS_ON_REGISTRATION_FORM = self::PREFIX . 'IS_ON_REGISTRATION_FORM';
 
     /**
      * @var array<string,array{formName:string,coerce: callable(mixed $value): mixed}>
@@ -71,8 +71,8 @@ final class SettingsConfiguration implements DataConfigurationInterface
                 'formName' => SettingsFormType::TYPE,
                 'coerce' => fn($value) => string($value),
             ],
-            self::FIELD_IS_ENABLED_FOR_AUTHORIZED => [
-                'formName' => SettingsFormType::IS_ENABLED_FOR_AUTHORIZED,
+            self::FIELD_IS_ON_REGISTRATION_FORM => [
+                'formName' => SettingsFormType::IS_ON_REGISTRATION_FORM,
                 'coerce' => fn($value) => boolExtended($value),
             ],
         ];

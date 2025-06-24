@@ -16,20 +16,17 @@ class SettingsController extends FrameworkBundleAdminController
 {
     private FormHandlerInterface $settingsDataHandler;
     private SettingsConfiguration $settingsConfiguration;
-    private Widget $widget;
     private Views $views;
 
     public function __construct(
         FormHandlerInterface  $settingsDataHandler,
         SettingsConfiguration $settingsConfiguration,
-        Widget                $widget,
         Views                 $views)
     {
         parent::__construct();
 
         $this->settingsDataHandler = $settingsDataHandler;
         $this->settingsConfiguration = $settingsConfiguration;
-        $this->widget = $widget;
         $this->views = $views;
     }
 
@@ -59,10 +56,10 @@ class SettingsController extends FrameworkBundleAdminController
         $siteKey = $this->settingsConfiguration::getField(SettingsConfiguration::FIELD_SITE_KEY);
 
         $widgetPreview = $siteKey ?
-            $this->widget->renderWidget() :
+            Widget::renderWidget() :
             '';
         $widgetScripts = $siteKey ?
-            $this->widget->renderWidgetScripts() :
+            Widget::renderWidgetScripts() :
             '';
 
         $args = [
