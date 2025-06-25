@@ -18,9 +18,15 @@ final class SettingsFormType extends TranslatorAwareType
     const THEME = 'theme';
     const TYPE = 'type';
     const IS_ON_REGISTRATION_FORM = 'is_on_registration_form';
+    const IS_ON_CONTACT_FORM = 'is_on_contact_form';
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $trueFalseChoices = [
+            $this->trans('No', 'Modules.Prosopoprocaptcha.Admin') => '0',
+            $this->trans('Yes', 'Modules.Prosopoprocaptcha.Admin') => '1',
+        ];
+
         $builder
             ->add(self::SECRET_KEY, PasswordType::class, [
                 'label' => $this->trans('Your secret key', 'Modules.Prosopoprocaptcha.Admin'),
@@ -51,10 +57,12 @@ final class SettingsFormType extends TranslatorAwareType
             ->add(self::IS_ON_REGISTRATION_FORM, SwitchType::class, [
                 'label' => $this->trans('Registration form protection', 'Modules.Prosopoprocaptcha.Admin'),
                 'required' => false,
-                'choices' => [
-                    $this->trans('No', 'Modules.Prosopoprocaptcha.Admin') => '0',
-                    $this->trans('Yes', 'Modules.Prosopoprocaptcha.Admin') => '1',
-                ],
+                'choices' => $trueFalseChoices,
+            ])
+            ->add(self::IS_ON_CONTACT_FORM, SwitchType::class, [
+                'label' => $this->trans('Contact form protection', 'Modules.Prosopoprocaptcha.Admin'),
+                'required' => false,
+                'choices' => $trueFalseChoices,
             ]);
     }
 }

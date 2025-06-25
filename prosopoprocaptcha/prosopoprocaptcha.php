@@ -22,16 +22,37 @@ if (!defined('_PS_VERSION_')) {
 final class ProsopoProcaptcha extends Module
 {
     const HOOKS = [
+        // generic hooks - for cases when no integration-specific hooks are present
+        'actionFrontControllerInitAfter',
+        'actionOutputHTMLBefore',
+        // integration-specific hooks
         'createAccountForm',
         'actionSubmitAccountBefore',
-        'actionOutputHTMLBefore',
     ];
 
-    // straight template overriding isn't supported: https://www.prestashop.com/forums/topic/1077918-override-theme-template-from-module-ps17/
+    /**
+     * When there are no hooks in the target templates, injection is the single way to add captcha,
+     * as straight template overriding isn't supported:
+     * https://devdocs.prestashop-project.org/8/modules/concepts/overrides/
+     * "Overriding a theme template from a module is NOT possible, and never will"
+     */
     const WIDGET_PAGE_INJECTIONS = [
         // controller name => injection (before/after)
         'contact' => [
             'before' => '<footer class="form-footer',
+            'settingsField' => SettingsConfiguration::FIELD_IS_ON_CONTACT_FORM,
+        ],
+    ];
+
+    /**
+     * When there are no hooks in the target form submission process,
+     * using top level 'actionFrontControllerInitAfter' is the single way to add custom validation
+     */
+    const WIDGET_VALIDATION_POINTS = [
+        // controller name => settings
+        'contact' => [
+            'submitField' => 'submitMessage',
+            'settingsField' => SettingsConfiguration::FIELD_IS_ON_CONTACT_FORM,
         ],
     ];
 
@@ -91,15 +112,7 @@ final class ProsopoProcaptcha extends Module
         Tools::redirectAdmin($route);
     }
 
-    /* fixme public function hookActionFrontControllerSetMedia()
-   {
-       $this->context->controller->registerJavascript(
-           'mailalerts-js',
-           'modules/' . $this->name . '/js/mailalerts.js'
-       );
-   }*/
-
-    // the hook is defined in themes/classic/templates/customer/_partials/customer-form.tpl
+    // this hook is defined in themes/classic/templates/customer/_partials/customer-form.tpl
     public function hookCreateAccountForm(): string
     {
         $isOnRegistrationForm = SettingsConfiguration::getField(
@@ -128,7 +141,6 @@ final class ProsopoProcaptcha extends Module
         $this->context->controller->errors[] = Widget::getValidationError();
 
         return false;
-
     }
 
     /**
@@ -136,22 +148,55 @@ final class ProsopoProcaptcha extends Module
      */
     public function hookActionOutputHTMLBefore(array $arguments): void
     {
-        $controllerName = $this->context->controller->php_self;
+        $controllerName = $this->getControllerName();
 
+        // fixme introduce a custom hook to allow modifications
         if (key_exists($controllerName, self::WIDGET_PAGE_INJECTIONS)) {
             $injection = self::WIDGET_PAGE_INJECTIONS[$controllerName];
 
-            $before = string($injection, 'before');
-            $after = string($injection, 'after');
+            $settingsField = string($injection, 'settingsField');
 
-            $html = string($arguments, 'html');
+            if (0 === strlen($settingsField) ||
+                SettingsConfiguration::getField($settingsField)) {
+                $before = string($injection, 'before');
+                $after = string($injection, 'after');
 
-            $search = $after . $before;
-            $replacement = $after . $this->renderWidget() . $before;
+                $html = string($arguments, 'html');
 
-            // no return, as 'html' key is passed as a reference (aka pointer)
-            $arguments['html'] = str_replace($search, $replacement, $html);
+                $search = $after . $before;
+                $replacement = $after . $this->renderWidget() . $before;
+
+                // no return, as 'html' key is passed as a reference (aka pointer)
+                $arguments['html'] = str_replace($search, $replacement, $html);
+            }
         }
+    }
+
+    public function hookActionFrontControllerInitAfter(): void
+    {
+        $controllerName = $this->getControllerName();
+
+        // fixme introduce a custom hook to allow modifications
+        if (key_exists($controllerName, self::WIDGET_VALIDATION_POINTS)) {
+            $settings = self::WIDGET_VALIDATION_POINTS[$controllerName];
+
+            $submitField = string($settings['submitField']);
+            $settingsField = string($settings['settingsField']);
+
+            if (Tools::isSubmit($submitField) &&
+                SettingsConfiguration::getField($settingsField)) {
+                if (Widget::verifyToken()) {
+                    return;
+                }
+
+                $this->context->controller->errors[] = Widget::getValidationError();
+            }
+        }
+    }
+
+    protected function getControllerName(): string
+    {
+        return $this->context->controller->php_self;
     }
 
     protected function renderWidget(): string
@@ -167,6 +212,4 @@ style="margin: 0 0 20px;display:flex;justify-content: center;">
 </div>',
             $widget);
     }
-
 }
-

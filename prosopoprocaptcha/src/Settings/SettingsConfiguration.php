@@ -18,6 +18,7 @@ final class SettingsConfiguration implements DataConfigurationInterface
     const FIELD_THEME = self::PREFIX . 'THEME';
     const FIELD_TYPE = self::PREFIX . 'TYPE';
     const FIELD_IS_ON_REGISTRATION_FORM = self::PREFIX . 'IS_ON_REGISTRATION_FORM';
+    const FIELD_IS_ON_CONTACT_FORM = self::PREFIX . 'IS_ON_CONTACT_FORM';
 
     /**
      * @var array<string,array{formName:string,coerce: callable(mixed $value): mixed}>
@@ -75,6 +76,10 @@ final class SettingsConfiguration implements DataConfigurationInterface
                 'formName' => SettingsFormType::IS_ON_REGISTRATION_FORM,
                 'coerce' => fn($value) => boolExtended($value),
             ],
+            self::FIELD_IS_ON_CONTACT_FORM => [
+                'formName' => SettingsFormType::IS_ON_CONTACT_FORM,
+                'coerce' => fn($value) => boolExtended($value),
+            ]
         ];
     }
 

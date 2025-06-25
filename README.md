@@ -16,8 +16,10 @@ Check **for-devs.md** for installation details.
 
 ## 2. Supported forms
 
+In the Classic (default) theme:
+
 * `/registration`
-* `/login`
+* `/contact-us`
 
 ## 3. Folders Description
 
