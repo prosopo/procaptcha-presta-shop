@@ -12,9 +12,9 @@ use function WPLake\Typed\string;
 
 final class Widget
 {
-    const SERVICE_SCRIPT_URL = 'https://js.prosopo.io/js/procaptcha.bundle.js';
-    const API_URL = 'https://api.prosopo.io/siteverify';
-    const TOKEN_FIELD_NAME = 'procaptcha-response';
+    private const SERVICE_SCRIPT_URL = 'https://js.prosopo.io/js/procaptcha.bundle.js';
+    private const API_URL = 'https://api.prosopo.io/siteverify';
+    private const TOKEN_FIELD_NAME = 'procaptcha-response';
 
     public static function renderWidget(): string
     {
@@ -45,6 +45,11 @@ final class Widget
     {
         $token = $token ?: self::getToken();
 
+        // skip if the token is missing.
+        if (0 === strlen($token)) {
+            return false;
+        }
+
         $data = json_encode([
             'token' => $token,
             'secret' => SettingsConfiguration::getField(SettingsConfiguration::FIELD_SECRET_KEY),
@@ -61,9 +66,14 @@ final class Widget
         $context = stream_context_create($options);
 
         $result = file_get_contents(self::API_URL, false, $context);
-        $response = json_decode($result, true);
 
-        return bool($response, 'verified');
+        if (is_string($result)) {
+            $response = json_decode($result, true);
+
+            return bool($response, 'verified');
+        }
+
+        return false;
     }
 
     public static function getToken(string $fieldName = self::TOKEN_FIELD_NAME): string
