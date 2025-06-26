@@ -12,8 +12,10 @@
 declare(strict_types=1);
 
 use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
-use Io\Prosopo\Procaptcha\Widget;
-use Io\Prosopo\Procaptcha\WidgetIntegration;
+use Io\Prosopo\Procaptcha\Widget\Widget;
+use Io\Prosopo\Procaptcha\Widget\WidgetIntegration;
+use Io\Prosopo\Procaptcha\Widget\WidgetMounter;
+use Io\Prosopo\Procaptcha\Widget\WidgetMountPoint;
 use function WPLake\Typed\string;
 
 if (!defined('_PS_VERSION_')) {
@@ -30,6 +32,8 @@ final class ProsopoProcaptcha extends Module
         'createAccountForm',
         'actionSubmitAccountBefore',
     ];
+
+    private WidgetMounter $widgetMounter;
 
     public function __construct()
     {
@@ -60,6 +64,13 @@ final class ProsopoProcaptcha extends Module
 
         $this->confirmUninstall = $this->trans('Are you sure you want to uninstall?', [], 'Modules.Prosopoprocaptcha.Admin');
 
+        $this->widgetMounter = new WidgetMounter([
+            'contact' => (new WidgetMountPoint())
+                ->setSettingName(SettingsConfiguration::FIELD_IS_ON_CONTACT_FORM)
+                ->setSubmitField('submitMessage')
+                ->setAnchor('<footer class="form-footer')
+                ->setPosition(WidgetMountPoint::POSITION_BEFORE),
+        ]);
     }
 
     public function install(): bool
@@ -87,33 +98,18 @@ final class ProsopoProcaptcha extends Module
         Tools::redirectAdmin($route);
     }
 
-
     /**
      * this hook is defined in themes/classic/templates/customer/_partials/customer-form.tpl
      * services aren't available here... so $this->get() returns null...
      */
     public function hookCreateAccountForm(): string
     {
-        // fixme make it more generic.
-        $isOnRegistrationForm = SettingsConfiguration::getField(
-            SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM
-        );
-
-        if ($isOnRegistrationForm) {
-            return WidgetIntegration::renderWidget();
-        }
-
-        return '';
+        return WidgetIntegration::renderWidget(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM);
     }
 
     public function hookActionSubmitAccountBefore(): bool
     {
-        $isOnRegistrationForm = SettingsConfiguration::getField(
-            SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM
-        );
-
-        if (!$isOnRegistrationForm ||
-            Widget::verifyToken()) {
+        if (WidgetIntegration::validateFormSubmission(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM)) {
             return true;
         }
 
@@ -131,14 +127,14 @@ final class ProsopoProcaptcha extends Module
         $html = string($arguments, 'html');
 
         // no return, as 'html' key is passed as a reference (aka pointer)
-        $arguments['html'] = WidgetIntegration::integrateWidget($controllerName, $html);
+        $arguments['html'] = $this->widgetMounter->mountWidget($controllerName, $html);
     }
 
     public function hookActionFrontControllerInitAfter(): void
     {
         $controllerName = $this->getControllerName();
 
-        if (WidgetIntegration::validateWidget($controllerName)) {
+        if ($this->widgetMounter->validateControllerMountPoint($controllerName)) {
             return;
         }
 
@@ -150,7 +146,7 @@ final class ProsopoProcaptcha extends Module
         return $this->context->controller->php_self;
     }
 
-    protected function addValidationError():void
+    protected function addValidationError(): void
     {
         $this->context->controller->errors[] = Widget::getValidationError();
     }

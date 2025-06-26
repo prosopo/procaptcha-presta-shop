@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Io\Prosopo\Procaptcha;
+namespace Io\Prosopo\Procaptcha\Widget;
 
 use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
 use Tools;
@@ -17,6 +17,18 @@ final class Widget
     private const TOKEN_FIELD_NAME = 'procaptcha-response';
 
     public static function renderWidget(): string
+    {
+        return sprintf('<div class="prosopo-procaptcha__row" 
+style="margin: 0 0 20px;display:flex;justify-content: center;">
+<div class="prosopo-procaptcha__field" style="max-width:300px; width: 100%%;">
+%s
+</div>
+</div>',
+            self::renderWidgetElement()
+        );
+    }
+
+    public static function renderWidgetElement(): string
     {
         return '<prosopo-procaptcha-presta-widget class="prosopo-procaptcha-presta-widget" style="display: block;">
     <div class="prosopo-procaptcha"></div>
