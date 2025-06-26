@@ -64,13 +64,10 @@ final class ProsopoProcaptcha extends Module
 
         $this->confirmUninstall = $this->trans('Are you sure you want to uninstall?', [], 'Modules.Prosopoprocaptcha.Admin');
 
-        $this->widgetMounter = new WidgetMounter([
-            'contact' => (new WidgetMountPoint())
-                ->setSettingName(SettingsConfiguration::FIELD_IS_ON_CONTACT_FORM)
-                ->setSubmitField('submitMessage')
-                ->setAnchor('<footer class="form-footer')
-                ->setPosition(WidgetMountPoint::POSITION_BEFORE),
-        ]);
+        // fixme introduce a custom hook to allow modifications (for custom themes)
+        $widgetMountPoints = $this->getWidgetMountPoints();
+
+        $this->widgetMounter = new WidgetMounter($widgetMountPoints);
     }
 
     public function install(): bool
@@ -99,6 +96,7 @@ final class ProsopoProcaptcha extends Module
     }
 
     /**
+     * "/registration" form rendering.
      * this hook is defined in themes/classic/templates/customer/_partials/customer-form.tpl
      * services aren't available here... so $this->get() returns null...
      */
@@ -107,13 +105,16 @@ final class ProsopoProcaptcha extends Module
         return WidgetIntegration::renderWidget(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM);
     }
 
+    /**
+     * "/registration" form validation
+     */
     public function hookActionSubmitAccountBefore(): bool
     {
         if (WidgetIntegration::validateFormSubmission(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM)) {
             return true;
         }
 
-        $this->addValidationError();
+        $this->addWidgetValidationError();
 
         return false;
     }
@@ -123,7 +124,7 @@ final class ProsopoProcaptcha extends Module
      */
     public function hookActionOutputHTMLBefore(array $arguments): void
     {
-        $controllerName = $this->getControllerName();
+        $controllerName = $this->getCurrentControllerName();
         $html = string($arguments, 'html');
 
         // no return, as 'html' key is passed as a reference (aka pointer)
@@ -132,21 +133,58 @@ final class ProsopoProcaptcha extends Module
 
     public function hookActionFrontControllerInitAfter(): void
     {
-        $controllerName = $this->getControllerName();
+        $controllerName = $this->getCurrentControllerName();
 
         if ($this->widgetMounter->validateControllerMountPoint($controllerName)) {
             return;
         }
 
-        $this->addValidationError();
+        $this->addWidgetValidationError();
     }
 
-    protected function getControllerName(): string
+    // todo actionAdminControllerInitAfter
+
+
+    /**
+     * When there are no hooks in the target template and/or validation process:
+     * 1) injection is used to add captcha, as straight template overriding isn't supported https://devdocs.prestashop-project.org/8/modules/concepts/overrides/
+     * 2) validation is called from the level above, using the 'actionFrontControllerInitAfter' hook
+     *
+     * @return array<string,WidgetMountPoint>
+     */
+    protected function getWidgetMountPoints(): array
+    {
+        return [
+            // contact-us
+            'contact' => (new WidgetMountPoint())
+                ->setSettingName(SettingsConfiguration::FIELD_IS_ON_CONTACT_FORM)
+                ->setSubmitField('submitMessage')
+                ->setAnchor('<footer class="form-footer')
+                ->setPosition(WidgetMountPoint::POSITION_BEFORE),
+            // login fixme hook into validation CustomerLoginFormCore->submit
+            'authentication' => (new WidgetMountPoint())
+                ->setSettingName(SettingsConfiguration::FIELD_IS_ON_LOGIN_FORM)
+                ->setAnchor('<footer class="form-footer')
+                ->setPosition(WidgetMountPoint::POSITION_BEFORE),
+            // password-recovery fixme hook into validation PasswordControllerCore->postProcess
+            'password' => (new WidgetMountPoint())
+                ->setSettingName(SettingsConfiguration::FIELD_IS_ON_PASSWORD_RECOVERY_FORM)
+                ->setAnchor('<section class="form-fields">')
+                ->setPosition(WidgetMountPoint::POSITION_BEFORE),
+           /* fixme - it's an every page thing.
+           '[footer]' => (new WidgetMountPoint())
+                ->setSettingName(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM)
+                ->setAnchor('<input type="hidden" name="blockHookName" value="displayFooterBefore" />')
+                ->setPosition(WidgetMountPoint::POSITION_AFTER),*/
+        ];
+    }
+
+    protected function getCurrentControllerName(): string
     {
         return $this->context->controller->php_self;
     }
 
-    protected function addValidationError(): void
+    protected function addWidgetValidationError(): void
     {
         $this->context->controller->errors[] = Widget::getValidationError();
     }

@@ -29,7 +29,7 @@ final class WidgetIntegration
 
     public static function validateMountPoint(WidgetMountPoint $mountPoint): bool
     {
-        return Tools::isSubmit($mountPoint->submitField) ?
+        return $mountPoint->isValidationExpected() && Tools::isSubmit($mountPoint->submitField) ?
             self::validateFormSubmission($mountPoint->settingName) :
             true;
     }

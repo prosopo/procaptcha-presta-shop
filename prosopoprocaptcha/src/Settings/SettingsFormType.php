@@ -18,6 +18,8 @@ final class SettingsFormType extends TranslatorAwareType
     const THEME = 'theme';
     const TYPE = 'type';
     const IS_ON_REGISTRATION_FORM = 'is_on_registration_form';
+    const IS_ON_LOGIN_FORM = 'is_on_login_form';
+    const IS_ON_PASSWORD_RECOVERY_FORM = 'is_on_password_recovery_form';
     const IS_ON_CONTACT_FORM = 'is_on_contact_form';
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -56,6 +58,16 @@ final class SettingsFormType extends TranslatorAwareType
             ])
             ->add(self::IS_ON_REGISTRATION_FORM, SwitchType::class, [
                 'label' => $this->trans('Registration form protection', 'Modules.Prosopoprocaptcha.Admin'),
+                'required' => false,
+                'choices' => $trueFalseChoices,
+            ])
+            ->add(self::IS_ON_LOGIN_FORM, SwitchType::class, [
+                'label' => $this->trans('Login form protection', 'Modules.Prosopoprocaptcha.Admin'),
+                'required' => false,
+                'choices' => $trueFalseChoices,
+            ])
+            ->add(self::IS_ON_PASSWORD_RECOVERY_FORM, SwitchType::class, [
+                'label' => $this->trans('Password recovery form protection', 'Modules.Prosopoprocaptcha.Admin'),
                 'required' => false,
                 'choices' => $trueFalseChoices,
             ])

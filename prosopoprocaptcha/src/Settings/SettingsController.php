@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Io\Prosopo\Procaptcha\Settings;
 
 use Io\Prosopo\Procaptcha\Views;
-use Io\Prosopo\Procaptcha\Widget;
+use Io\Prosopo\Procaptcha\Widget\Widget;
 use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\Form\FormInterface;
