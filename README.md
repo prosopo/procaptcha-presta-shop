@@ -20,6 +20,7 @@ In the Classic (default) theme:
 
 * `/registration`
 * `/login`
+* `/password-recovery`
 * `/contact-us`
 
 ## 3. Folders Description

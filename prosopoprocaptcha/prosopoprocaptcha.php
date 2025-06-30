@@ -159,8 +159,6 @@ final class ProsopoProcaptcha extends Module
         $this->addWidgetValidationError($errorType);
     }
 
-    // todo actionAdminControllerInitAfter
-
     protected function displayPreviousSubmissionError(string $currentController): bool
     {
         $validationError = $this->context->cookie->{self::COOKIE_VALIDATION_ERROR} ?? '';
@@ -202,11 +200,12 @@ final class ProsopoProcaptcha extends Module
                 ->setSubmitField('submitMessage')
                 ->setAnchor('<footer class="form-footer')
                 ->setPosition(WidgetMountPoint::POSITION_BEFORE),
-            // "/password-recovery" fixme test
-            /*  'password' => (new WidgetMountPoint())
-                  ->setSettingName(SettingsConfiguration::FIELD_IS_ON_PASSWORD_RECOVERY_FORM)
-                  ->setAnchor('<section class="form-fields">')
-                  ->setPosition(WidgetMountPoint::POSITION_BEFORE),*/
+            // "/password-recovery"
+            'password' => (new WidgetMountPoint())
+                ->setSettingName(SettingsConfiguration::FIELD_IS_ON_PASSWORD_RECOVERY_FORM)
+                ->setSubmitField('email')
+                ->setAnchor('<section class="form-fields">')
+                ->setPosition(WidgetMountPoint::POSITION_BEFORE),
         ];
     }
 
