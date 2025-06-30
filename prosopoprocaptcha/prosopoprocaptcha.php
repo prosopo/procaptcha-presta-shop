@@ -11,6 +11,7 @@
 
 declare(strict_types=1);
 
+use Io\Prosopo\Procaptcha\Logger;
 use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
 use Io\Prosopo\Procaptcha\Widget\Widget;
 use Io\Prosopo\Procaptcha\Widget\WidgetIntegration;
@@ -32,8 +33,13 @@ final class ProsopoProcaptcha extends Module
         'createAccountForm',
         'actionSubmitAccountBefore',
     ];
+    const QUERY_ARGUMENT_ERROR = 'procaptcha-error';
 
     private WidgetMounter $widgetMounter;
+    /**
+     * @var array<string,callable>
+     */
+    private array $widgetValidationErrorHandlers;
 
     public function __construct()
     {
@@ -68,6 +74,7 @@ final class ProsopoProcaptcha extends Module
         $widgetMountPoints = $this->getWidgetMountPoints();
 
         $this->widgetMounter = new WidgetMounter($widgetMountPoints);
+        $this->widgetValidationErrorHandlers = $this->getWidgetValidationErrorHandlers();
     }
 
     public function install(): bool
@@ -114,7 +121,7 @@ final class ProsopoProcaptcha extends Module
             return true;
         }
 
-        $this->addWidgetValidationError();
+        $this->addWidgetValidationError(WidgetMountPoint::ERROR_TYPE_CONTROLLER);
 
         return false;
     }
@@ -133,17 +140,26 @@ final class ProsopoProcaptcha extends Module
 
     public function hookActionFrontControllerInitAfter(): void
     {
-        $controllerName = $this->getCurrentControllerName();
+        if (key_exists(self::QUERY_ARGUMENT_ERROR, $_GET)) {
+            $this->addWidgetValidationError(WidgetMountPoint::ERROR_TYPE_CONTROLLER);
 
-        if ($this->widgetMounter->validateControllerMountPoint($controllerName)) {
+            unset($_GET[self::QUERY_ARGUMENT_ERROR]);
+
             return;
         }
 
-        $this->addWidgetValidationError();
+        $controllerName = $this->getCurrentControllerName();
+
+        $errorType = $this->widgetMounter->validateControllerMountPoint($controllerName);
+
+        if (is_null($errorType)) {
+            return;
+        }
+
+        $this->addWidgetValidationError($errorType);
     }
 
     // todo actionAdminControllerInitAfter
-
 
     /**
      * When there are no hooks in the target template and/or validation process:
@@ -161,9 +177,11 @@ final class ProsopoProcaptcha extends Module
                 ->setSubmitField('submitMessage')
                 ->setAnchor('<footer class="form-footer')
                 ->setPosition(WidgetMountPoint::POSITION_BEFORE),
-            // login fixme hook into validation CustomerLoginFormCore->submit
+            // login
             'authentication' => (new WidgetMountPoint())
                 ->setSettingName(SettingsConfiguration::FIELD_IS_ON_LOGIN_FORM)
+                ->setSubmitField('email')
+                ->setErrorType(WidgetMountPoint::ERROR_TYPE_REDIRECT)
                 ->setAnchor('<footer class="form-footer')
                 ->setPosition(WidgetMountPoint::POSITION_BEFORE),
             // password-recovery fixme hook into validation PasswordControllerCore->postProcess
@@ -171,11 +189,38 @@ final class ProsopoProcaptcha extends Module
                 ->setSettingName(SettingsConfiguration::FIELD_IS_ON_PASSWORD_RECOVERY_FORM)
                 ->setAnchor('<section class="form-fields">')
                 ->setPosition(WidgetMountPoint::POSITION_BEFORE),
-           /* fixme - it's an every page thing.
-           '[footer]' => (new WidgetMountPoint())
-                ->setSettingName(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM)
-                ->setAnchor('<input type="hidden" name="blockHookName" value="displayFooterBefore" />')
-                ->setPosition(WidgetMountPoint::POSITION_AFTER),*/
+            /* fixme - it's an every page thing.
+            '[footer]' => (new WidgetMountPoint())
+                 ->setSettingName(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM)
+                 ->setAnchor('<input type="hidden" name="blockHookName" value="displayFooterBefore" />')
+                 ->setPosition(WidgetMountPoint::POSITION_AFTER),*/
+        ];
+    }
+
+    /**
+     * @return array<string,callable>
+     */
+    protected function getWidgetValidationErrorHandlers(): array
+    {
+        return [
+            WidgetMountPoint::ERROR_TYPE_CONTROLLER => function () {
+               $this->context->controller->errors[] = Widget::getValidationError();
+            },
+            WidgetMountPoint::ERROR_TYPE_REDIRECT => function () {
+                $currentUrl = Tools::getCurrentUrl();
+
+                $argumentDelimiter = false === strpos($currentUrl, '?') ?
+                    '?' :
+                    '&';
+
+                $currentUrl .= sprintf('%s%s=%s',
+                    $argumentDelimiter,
+                    self::QUERY_ARGUMENT_ERROR,
+                    '1'
+                );
+
+                Tools::redirect($currentUrl);
+            },
         ];
     }
 
@@ -184,8 +229,10 @@ final class ProsopoProcaptcha extends Module
         return $this->context->controller->php_self;
     }
 
-    protected function addWidgetValidationError(): void
+    protected function addWidgetValidationError(string $errorType): void
     {
-        $this->context->controller->errors[] = Widget::getValidationError();
+        if (key_exists($errorType, $this->widgetValidationErrorHandlers)) {
+            $this->widgetValidationErrorHandlers[$errorType]();
+        }
     }
 }

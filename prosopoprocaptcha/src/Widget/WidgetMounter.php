@@ -40,13 +40,20 @@ final class WidgetMounter
         return $html;
     }
 
-    public function validateControllerMountPoint(string $controllerName): bool
+    /**
+     * @return string|null WidgetMountPoint->errorType
+     */
+    public function validateControllerMountPoint(string $controllerName): ?string
     {
         $mountPoint = $this->getMountPoint($controllerName);
 
-        return $mountPoint instanceof WidgetMountPoint ?
-            WidgetIntegration::validateMountPoint($mountPoint) :
-            true;
+        if ($mountPoint instanceof WidgetMountPoint) {
+            return WidgetIntegration::validateMountPoint($mountPoint) ?
+                null :
+                $mountPoint->errorType;
+        }
+
+        return null;
     }
 
     protected function getMountPoint(string $controllerName): ?WidgetMountPoint
