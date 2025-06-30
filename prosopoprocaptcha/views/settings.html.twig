@@ -36,9 +36,11 @@
             </h3>
 
             <div class="card-body">
-                <p>
-                    {{ 'If the credentials are valid, you should be able to complete the captcha below:'|trans({}, 'Modules.Prosopoprocaptcha.Admin') }}
-                </p>
+                <div style="text-align: center;">
+                    <p style="margin:10px auto 20px; max-width: 300px;">
+                        {{ 'If the credentials are valid, you should be able to complete the captcha below:'|trans({}, 'Modules.Prosopoprocaptcha.Admin') }}
+                    </p>
+                </div>
 
                 {{ widgetPreview|raw }}
             </div>

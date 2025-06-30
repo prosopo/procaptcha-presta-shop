@@ -33,7 +33,11 @@ final class ProsopoProcaptcha extends Module
         'createAccountForm',
         'actionSubmitAccountBefore',
     ];
-    const QUERY_ARGUMENT_ERROR = 'procaptcha-error';
+    /**
+     * Cookie is used to display a submission error -
+     * when there is no way to hook into the particular form processing.
+     */
+    const COOKIE_VALIDATION_ERROR = 'procaptcha-error';
 
     private WidgetMounter $widgetMounter;
     /**
@@ -140,15 +144,11 @@ final class ProsopoProcaptcha extends Module
 
     public function hookActionFrontControllerInitAfter(): void
     {
-        if (key_exists(self::QUERY_ARGUMENT_ERROR, $_GET)) {
-            $this->addWidgetValidationError(WidgetMountPoint::ERROR_TYPE_CONTROLLER);
+        $controllerName = $this->getCurrentControllerName();
 
-            unset($_GET[self::QUERY_ARGUMENT_ERROR]);
-
+        if ($this->displayPreviousSubmissionError($controllerName)) {
             return;
         }
-
-        $controllerName = $this->getCurrentControllerName();
 
         $errorType = $this->widgetMounter->validateControllerMountPoint($controllerName);
 
@@ -161,6 +161,23 @@ final class ProsopoProcaptcha extends Module
 
     // todo actionAdminControllerInitAfter
 
+    protected function displayPreviousSubmissionError(string $currentController): bool
+    {
+        $validationError = $this->context->cookie->{self::COOKIE_VALIDATION_ERROR} ?? '';
+        $validationErrorController = string($validationError);
+
+        if ($currentController === $validationErrorController) {
+            unset($this->context->cookie->{self::COOKIE_VALIDATION_ERROR});
+            $this->context->cookie->write();
+
+            $this->addWidgetValidationError(WidgetMountPoint::ERROR_TYPE_CONTROLLER);
+
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * When there are no hooks in the target template and/or validation process:
      * 1) injection is used to add captcha, as straight template overriding isn't supported https://devdocs.prestashop-project.org/8/modules/concepts/overrides/
@@ -171,29 +188,25 @@ final class ProsopoProcaptcha extends Module
     protected function getWidgetMountPoints(): array
     {
         return [
-            // contact-us
-            'contact' => (new WidgetMountPoint())
-                ->setSettingName(SettingsConfiguration::FIELD_IS_ON_CONTACT_FORM)
-                ->setSubmitField('submitMessage')
-                ->setAnchor('<footer class="form-footer')
-                ->setPosition(WidgetMountPoint::POSITION_BEFORE),
-            // login
+            // "/registration" => handled manually, via hooks.
+            // "/login"
             'authentication' => (new WidgetMountPoint())
                 ->setSettingName(SettingsConfiguration::FIELD_IS_ON_LOGIN_FORM)
                 ->setSubmitField('email')
                 ->setErrorType(WidgetMountPoint::ERROR_TYPE_REDIRECT)
                 ->setAnchor('<footer class="form-footer')
                 ->setPosition(WidgetMountPoint::POSITION_BEFORE),
-            // password-recovery fixme hook into validation PasswordControllerCore->postProcess
-            'password' => (new WidgetMountPoint())
-                ->setSettingName(SettingsConfiguration::FIELD_IS_ON_PASSWORD_RECOVERY_FORM)
-                ->setAnchor('<section class="form-fields">')
+            // "/contact-us"
+            'contact' => (new WidgetMountPoint())
+                ->setSettingName(SettingsConfiguration::FIELD_IS_ON_CONTACT_FORM)
+                ->setSubmitField('submitMessage')
+                ->setAnchor('<footer class="form-footer')
                 ->setPosition(WidgetMountPoint::POSITION_BEFORE),
-            /* fixme - it's an every page thing.
-            '[footer]' => (new WidgetMountPoint())
-                 ->setSettingName(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM)
-                 ->setAnchor('<input type="hidden" name="blockHookName" value="displayFooterBefore" />')
-                 ->setPosition(WidgetMountPoint::POSITION_AFTER),*/
+            // "/password-recovery" fixme test
+            /*  'password' => (new WidgetMountPoint())
+                  ->setSettingName(SettingsConfiguration::FIELD_IS_ON_PASSWORD_RECOVERY_FORM)
+                  ->setAnchor('<section class="form-fields">')
+                  ->setPosition(WidgetMountPoint::POSITION_BEFORE),*/
         ];
     }
 
@@ -204,21 +217,13 @@ final class ProsopoProcaptcha extends Module
     {
         return [
             WidgetMountPoint::ERROR_TYPE_CONTROLLER => function () {
-               $this->context->controller->errors[] = Widget::getValidationError();
+                $this->context->controller->errors[] = Widget::getValidationError();
             },
             WidgetMountPoint::ERROR_TYPE_REDIRECT => function () {
+                $this->context->cookie->{self::COOKIE_VALIDATION_ERROR} = $this->getCurrentControllerName();
+                $this->context->cookie->write();
+
                 $currentUrl = Tools::getCurrentUrl();
-
-                $argumentDelimiter = false === strpos($currentUrl, '?') ?
-                    '?' :
-                    '&';
-
-                $currentUrl .= sprintf('%s%s=%s',
-                    $argumentDelimiter,
-                    self::QUERY_ARGUMENT_ERROR,
-                    '1'
-                );
-
                 Tools::redirect($currentUrl);
             },
         ];

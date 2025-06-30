@@ -19,7 +19,7 @@ final class WidgetMountPoint
     const ERROR_TYPE_CONTROLLER = 'error_type_controller';
     /**
      * In some forms, like login, controller errors don't prevent the processing logic,
-     * so redirect to the same page prevents it and contains a show-error argument.
+     * so redirect to the same page prevents it.
      */
     const ERROR_TYPE_REDIRECT = 'error_type_redirect';
 

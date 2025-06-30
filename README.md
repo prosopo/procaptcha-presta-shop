@@ -19,6 +19,7 @@ Check **for-devs.md** for installation details.
 In the Classic (default) theme:
 
 * `/registration`
+* `/login`
 * `/contact-us`
 
 ## 3. Folders Description
