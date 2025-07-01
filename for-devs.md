@@ -8,7 +8,7 @@ Make sure docker is installed, then use the following commands:
 
 ```bash
 cd docker
-docker compose --file presta-shop.docker-compose.yml up -d --force-recreate
+docker compose --file prestashop.docker-compose.yml up -d --force-recreate
 # only once
 bash ./tools/restore-db.sh
 
@@ -41,10 +41,34 @@ cd prosopoprocaptcha/assets
 yarn build
 ```
 
-# 3. Known issues
+# 3. Code quality
+
+## 3.1) PHPStan
+
+```bash 
+cd prosopoprocaptcha
+composer phpstan
+```
+
+# 4. Known issues
 
 * Debug mode - there is a [known issue](https://github.com/PrestaShop/PrestaShop/issues/38771) with the debug mode in
   the dockered PrestaShop, so
   the current setup has the `config/defines_custom.inc.php` file underscored - to avoid inclusion
 * `prosopoprocaptcha` module doesn't contain neither dash nor underscore
   as [recommended by the Docs](https://devdocs.prestashop-project.org/8/modules/creation/tutorial/)
+
+# 5. Potential integrations
+
+* admin login
+* admin reset password
+* newsletter subscription (footer)
+* `/guest-tracking`
+* product reviews (for guests and/or authorized)
+* `/order` (checkout for guests)
+
+# 6. Potential improvements
+
+* translations
+* e2e tests
+* CI/CD

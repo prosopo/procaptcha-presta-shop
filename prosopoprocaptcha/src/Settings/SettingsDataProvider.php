@@ -16,11 +16,18 @@ final class SettingsDataProvider implements FormDataProviderInterface
         $this->settingsConfiguration = $settingsConfiguration;
     }
 
+    /**
+     * @return array<int|string, mixed>
+     */
     public function getData(): array
     {
         return $this->settingsConfiguration->getConfiguration();
     }
 
+    /**
+     * @param array<string, mixed> $data
+     * @return array<int|string, mixed>
+     */
     public function setData(array $data): array
     {
         return $this->settingsConfiguration->updateConfiguration($data);

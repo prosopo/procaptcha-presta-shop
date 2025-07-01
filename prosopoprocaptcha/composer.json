@@ -1,6 +1,9 @@
 {
   "name": "prosopo/procaptcha-prestashop",
   "description": "Procaptcha - GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website",
+  "type": "prestashop-module",
+  "author": "Prosopo",
+  "license": "MIT License",
   "authors": [
     {
       "name": "Prosopo",
@@ -12,6 +15,10 @@
     "wplake/typed": "^1.2",
     "ext-json": "*"
   },
+  "require-dev": {
+    "prestashop/php-dev-tools": "^5.0",
+    "phpstan/phpstan": "^2.1"
+  },
   "autoload": {
     "psr-4": {
       "Io\\Prosopo\\Procaptcha\\": "src/"
@@ -21,7 +28,7 @@
     "preferred-install": "dist",
     "prepend-autoloader": false
   },
-  "type": "prestashop-module",
-  "author": "Prosopo",
-  "license": "MIT License"
+  "scripts": {
+    "phpstan": "_PS_ROOT_DIR_=../docker/volumes/prestashop ./vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon"
+  }
 }

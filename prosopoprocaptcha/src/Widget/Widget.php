@@ -97,10 +97,12 @@ style="margin: 0 0 20px;display:flex;justify-content: center;">
 
     public static function getValidationError(): string
     {
-        return Translate::getModuleTranslation(
+        $error = Translate::getModuleTranslation(
             'prosopoprocaptcha',
             'Please verify that you are human.',
             'Modules.Prosopoprocaptcha.Shop'
         );
+
+        return string($error);
     }
 }

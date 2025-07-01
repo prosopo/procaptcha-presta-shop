@@ -60,24 +60,22 @@ final class ProsopoProcaptcha extends Module
 
         parent::__construct();
 
-        // fixme remove after active development is complete.
-        foreach (array_diff(self::HOOKS, ['createAccountForm']) as $hook) {
+        // todo uncomment during development.
+       /* foreach (array_diff(self::HOOKS, ['createAccountForm']) as $hook) {
             if ($this->isRegisteredInHook($hook)) {
                 continue;
             }
 
             $this->registerHook($hook);
-        }
+        }*/
 
         $this->displayName = $this->trans('Prosopo Procaptcha', [], 'Modules.Prosopoprocaptcha.Admin');
         $this->description = $this->trans('GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.', [], 'Modules.Prosopoprocaptcha.Admin');
-
         $this->confirmUninstall = $this->trans('Are you sure you want to uninstall?', [], 'Modules.Prosopoprocaptcha.Admin');
 
-        // fixme introduce a custom hook to allow modifications (for custom themes)
         $widgetMountPoints = $this->getWidgetMountPoints();
-
         $this->widgetMounter = new WidgetMounter($widgetMountPoints);
+
         $this->widgetValidationErrorHandlers = $this->getWidgetValidationErrorHandlers();
     }
 
@@ -113,7 +111,9 @@ final class ProsopoProcaptcha extends Module
      */
     public function hookCreateAccountForm(): string
     {
-        return WidgetIntegration::renderWidget(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM);
+        return 'registration' === $this->getCurrentControllerName() ?
+            WidgetIntegration::renderWidget(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM) :
+            '';
     }
 
     /**
@@ -121,13 +121,14 @@ final class ProsopoProcaptcha extends Module
      */
     public function hookActionSubmitAccountBefore(): bool
     {
-        if (WidgetIntegration::validateFormSubmission(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM)) {
-            return true;
+        if ('registration' === $this->getCurrentControllerName() &&
+            !WidgetIntegration::validateFormSubmission(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM)) {
+            $this->addWidgetValidationError(WidgetMountPoint::ERROR_TYPE_CONTROLLER);
+
+            return false;
         }
 
-        $this->addWidgetValidationError(WidgetMountPoint::ERROR_TYPE_CONTROLLER);
-
-        return false;
+        return true;
     }
 
     /**
@@ -230,7 +231,12 @@ final class ProsopoProcaptcha extends Module
 
     protected function getCurrentControllerName(): string
     {
-        return $this->context->controller->php_self;
+        $controller = $this->context->controller;
+
+        return $controller instanceof Controller ?
+            // for some reason, on the "my alerts page" it contains NULL
+            (string)$controller->php_self :
+            '';
     }
 
     protected function addWidgetValidationError(string $errorType): void

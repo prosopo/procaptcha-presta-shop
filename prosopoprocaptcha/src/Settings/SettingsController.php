@@ -11,6 +11,7 @@ use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use function WPLake\Typed\arr;
 
 class SettingsController extends FrameworkBundleAdminController
 {
@@ -37,7 +38,8 @@ class SettingsController extends FrameworkBundleAdminController
 
         if ($form->isSubmitted() &&
             $form->isValid()) {
-            $errors = $this->settingsDataHandler->save($form->getData());
+            $formData = arr($form->getData());
+            $errors = $this->settingsDataHandler->save($formData);
 
             if (empty($errors)) {
                 $this->addFlash('success', $this->trans('Successful update.', 'Admin.Notifications.Success'));
@@ -51,6 +53,9 @@ class SettingsController extends FrameworkBundleAdminController
         return $this->renderSettingsPage($form);
     }
 
+    /**
+     * @param FormInterface<array<string, mixed>> $form
+     */
     private function renderSettingsPage(FormInterface $form): Response
     {
         $siteKey = $this->settingsConfiguration::getField(SettingsConfiguration::FIELD_SITE_KEY);

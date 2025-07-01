@@ -16,7 +16,7 @@ final class WidgetMounter
     private array $mountPoints;
 
     /**
-     * @var array<string, WidgetMountPoint> $integrations
+     * @param array<string, WidgetMountPoint> $integrations
      */
     public function __construct(array $integrations)
     {
