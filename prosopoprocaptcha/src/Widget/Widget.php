@@ -9,11 +9,16 @@ use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
 use function WPLake\Typed\bool;
 use function WPLake\Typed\string;
 
+/**
+ * Important: This class and its public methods are mentioned in the Docs as 'public module APIs',
+ * be sure to keep back compatibility if you make any structure changes.
+ */
 final class Widget
 {
     private const SERVICE_SCRIPT_URL = 'https://js.prosopo.io/js/procaptcha.bundle.js';
     private const API_URL = 'https://api.prosopo.io/siteverify';
     private const TOKEN_FIELD_NAME = 'procaptcha-response';
+    private const WIDGET_SCRIPT = 'modules/prosopoprocaptcha/dist/widget-integration.min.js';
 
     public static function renderWidget(): string
     {
@@ -43,8 +48,11 @@ style="margin: 0 0 20px;display:flex;justify-content: center;">
         ];
 
         $jsonOptions = (string) json_encode($options);
-        // fixme add version.
-        $widgetIntegrationScript = __PS_BASE_URI__ . 'modules/prosopoprocaptcha/dist/widget-integration.min.js';
+
+        $widgetIntegrationScript = sprintf('%s?ver=%s',
+            __PS_BASE_URI__ . self::WIDGET_SCRIPT,
+            \ProsopoProcaptcha::VERSION
+        );
 
         return
             sprintf('<script type="module" async defer src="%s"></script>', self::SERVICE_SCRIPT_URL) .
@@ -87,13 +95,6 @@ style="margin: 0 0 20px;display:flex;justify-content: center;">
         return false;
     }
 
-    public static function getToken(string $fieldName = self::TOKEN_FIELD_NAME): string
-    {
-        $tokenValue = \Tools::getValue($fieldName);
-
-        return string($tokenValue);
-    }
-
     public static function getValidationError(): string
     {
         $error = \Translate::getModuleTranslation(
@@ -103,5 +104,12 @@ style="margin: 0 0 20px;display:flex;justify-content: center;">
         );
 
         return string($error);
+    }
+
+    protected static function getToken(string $fieldName = self::TOKEN_FIELD_NAME): string
+    {
+        $tokenValue = \Tools::getValue($fieldName);
+
+        return string($tokenValue);
     }
 }

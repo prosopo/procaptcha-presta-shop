@@ -27,6 +27,7 @@ if (!defined('_PS_VERSION_')) {
 
 final class ProsopoProcaptcha extends Module
 {
+    const VERSION = '1.0.0';
     const HOOKS = [
         // generic hooks - for cases when no integration-specific hooks are present
         'actionFrontControllerInitAfter',
@@ -51,7 +52,7 @@ final class ProsopoProcaptcha extends Module
     {
         $this->name = 'prosopoprocaptcha';
         $this->tab = 'front_office_features';
-        $this->version = '1.0.0';
+        $this->version = self::VERSION;
         $this->author = 'Prosopo';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
