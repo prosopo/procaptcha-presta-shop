@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Io\Prosopo\Procaptcha\Widget;
 
 use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
-use Tools;
-use Translate;
+
 use function WPLake\Typed\bool;
 use function WPLake\Typed\string;
 
@@ -43,7 +42,7 @@ style="margin: 0 0 20px;display:flex;justify-content: center;">
             'captchaType' => SettingsConfiguration::getField(SettingsConfiguration::FIELD_TYPE),
         ];
 
-        $jsonOptions = (string)json_encode($options);
+        $jsonOptions = (string) json_encode($options);
         // fixme add version.
         $widgetIntegrationScript = __PS_BASE_URI__ . 'modules/prosopoprocaptcha/dist/widget-integration.min.js';
 
@@ -90,14 +89,14 @@ style="margin: 0 0 20px;display:flex;justify-content: center;">
 
     public static function getToken(string $fieldName = self::TOKEN_FIELD_NAME): string
     {
-        $tokenValue = Tools::getValue($fieldName);
+        $tokenValue = \Tools::getValue($fieldName);
 
         return string($tokenValue);
     }
 
     public static function getValidationError(): string
     {
-        $error = Translate::getModuleTranslation(
+        $error = \Translate::getModuleTranslation(
             'prosopoprocaptcha',
             'Please verify that you are human.',
             'Modules.Prosopoprocaptcha.Shop'

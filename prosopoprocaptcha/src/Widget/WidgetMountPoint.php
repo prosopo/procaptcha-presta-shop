@@ -29,7 +29,7 @@ final class WidgetMountPoint
     public string $position = ''; // keep empty if there is a related hook and mounting happens directly
     public string $errorType = self::ERROR_TYPE_CONTROLLER;
 
-    //// setters
+    // // setters
 
     public function setSettingName(string $settingName): self
     {
@@ -66,7 +66,7 @@ final class WidgetMountPoint
         return $this;
     }
 
-    //// getters
+    // // getters
 
     public function isValidationExpected(): bool
     {

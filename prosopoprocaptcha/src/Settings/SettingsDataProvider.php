@@ -26,6 +26,7 @@ final class SettingsDataProvider implements FormDataProviderInterface
 
     /**
      * @param array<string, mixed> $data
+     *
      * @return array<int|string, mixed>
      */
     public function setData(array $data): array

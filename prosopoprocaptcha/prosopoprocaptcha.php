@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Prosopo Procaptcha Module
  *
@@ -16,8 +17,9 @@ use Io\Prosopo\Procaptcha\Widget\Widget;
 use Io\Prosopo\Procaptcha\Widget\WidgetIntegration;
 use Io\Prosopo\Procaptcha\Widget\WidgetMounter;
 use Io\Prosopo\Procaptcha\Widget\WidgetMountPoint;
-use function WPLake\Typed\string;
 use PrestaShopBundle\Service\Routing\Router;
+
+use function WPLake\Typed\string;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -54,7 +56,7 @@ final class ProsopoProcaptcha extends Module
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
             'min' => '8.0.0',
-            'max' => _PS_VERSION_
+            'max' => _PS_VERSION_,
         ];
         $this->bootstrap = true;
 
@@ -87,8 +89,8 @@ final class ProsopoProcaptcha extends Module
 
     public function install(): bool
     {
-        return parent::install() &&
-            $this->registerHook(self::HOOKS);
+        return parent::install()
+            && $this->registerHook(self::HOOKS);
     }
 
     public function uninstall(): bool
@@ -131,8 +133,8 @@ final class ProsopoProcaptcha extends Module
      */
     public function hookActionSubmitAccountBefore(): bool
     {
-        if ('registration' === $this->getCurrentControllerName() &&
-            !WidgetIntegration::validateFormSubmission(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM)) {
+        if ('registration' === $this->getCurrentControllerName()
+            && !WidgetIntegration::validateFormSubmission(SettingsConfiguration::FIELD_IS_ON_REGISTRATION_FORM)) {
             $this->addWidgetValidationError(WidgetMountPoint::ERROR_TYPE_CONTROLLER);
 
             return false;
@@ -246,7 +248,7 @@ final class ProsopoProcaptcha extends Module
 
         return $controller instanceof Controller ?
             // for some reason, on the "my alerts page" it contains NULL
-            (string)$controller->php_self :
+            (string) $controller->php_self :
             '';
     }
 

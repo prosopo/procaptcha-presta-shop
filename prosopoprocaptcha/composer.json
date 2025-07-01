@@ -17,7 +17,9 @@
   },
   "require-dev": {
     "prestashop/php-dev-tools": "^5.0",
-    "phpstan/phpstan": "^2.1"
+    "phpstan/phpstan": "^2.1",
+    "squizlabs/php_codesniffer": "^3.13",
+    "friendsofphp/php-cs-fixer": "^3.76"
   },
   "autoload": {
     "psr-4": {
@@ -29,6 +31,7 @@
     "prepend-autoloader": false
   },
   "scripts": {
-    "phpstan": "_PS_ROOT_DIR_=../docker/volumes/prestashop ./vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon"
+    "phpstan": "_PS_ROOT_DIR_=../docker/volumes/prestashop ./vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon",
+    "phpcs": "vendor/bin/php-cs-fixer fix"
   }
 }

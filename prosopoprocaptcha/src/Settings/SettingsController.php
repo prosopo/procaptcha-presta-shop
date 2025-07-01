@@ -11,6 +11,7 @@ use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 use function WPLake\Typed\arr;
 
 class SettingsController extends FrameworkBundleAdminController
@@ -20,9 +21,9 @@ class SettingsController extends FrameworkBundleAdminController
     private Views $views;
 
     public function __construct(
-        FormHandlerInterface  $settingsDataHandler,
+        FormHandlerInterface $settingsDataHandler,
         SettingsConfiguration $settingsConfiguration,
-        Views                 $views)
+        Views $views)
     {
         parent::__construct();
 
@@ -36,8 +37,8 @@ class SettingsController extends FrameworkBundleAdminController
         $form = $this->settingsDataHandler->getForm();
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() &&
-            $form->isValid()) {
+        if ($form->isSubmitted()
+            && $form->isValid()) {
             $formData = arr($form->getData());
             $errors = $this->settingsDataHandler->save($formData);
 

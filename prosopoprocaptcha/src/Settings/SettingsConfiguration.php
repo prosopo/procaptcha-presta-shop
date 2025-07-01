@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Settings;
 
-use Configuration;
 use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
 use PrestaShop\PrestaShop\Core\Domain\Configuration\ShopConfigurationInterface;
+
 use function WPLake\Typed\boolExtended;
 use function WPLake\Typed\string;
 
@@ -24,7 +24,7 @@ final class SettingsConfiguration implements DataConfigurationInterface
     const FIELD_IS_ON_LOGIN_FORM = self::PREFIX . 'IS_ON_LOGIN_FORM';
 
     /**
-     * @var array<string,array{formName:string,coerce: callable(mixed $value): mixed}>
+     * @var array<string,array{formName:string,coerce: callable(mixed): mixed}>
      */
     private array $relations;
 
@@ -45,7 +45,7 @@ final class SettingsConfiguration implements DataConfigurationInterface
         $relations = self::getRelations();
 
         if (key_exists($fieldName, $relations)) {
-            $value = Configuration::get($fieldName);
+            $value = \Configuration::get($fieldName);
             $relation = $relations[$fieldName];
 
             return $relation['coerce']($value);
@@ -61,36 +61,36 @@ final class SettingsConfiguration implements DataConfigurationInterface
     {
         return [
             self::FIELD_SECRET_KEY => ['formName' => SettingsFormType::SECRET_KEY,
-                'coerce' => fn($value) => string($value),
+                'coerce' => fn ($value) => string($value),
             ],
             self::FIELD_SITE_KEY => [
                 'formName' => SettingsFormType::SITE_KEY,
-                'coerce' => fn($value) => string($value),
+                'coerce' => fn ($value) => string($value),
             ],
             self::FIELD_THEME => [
                 'formName' => SettingsFormType::THEME,
-                'coerce' => fn($value) => string($value),
+                'coerce' => fn ($value) => string($value),
             ],
             self::FIELD_TYPE => [
                 'formName' => SettingsFormType::TYPE,
-                'coerce' => fn($value) => string($value),
+                'coerce' => fn ($value) => string($value),
             ],
             self::FIELD_IS_ON_REGISTRATION_FORM => [
                 'formName' => SettingsFormType::IS_ON_REGISTRATION_FORM,
-                'coerce' => fn($value) => boolExtended($value),
+                'coerce' => fn ($value) => boolExtended($value),
             ],
             self::FIELD_IS_ON_LOGIN_FORM => [
                 'formName' => SettingsFormType::IS_ON_LOGIN_FORM,
-                'coerce' => fn($value) => boolExtended($value),
+                'coerce' => fn ($value) => boolExtended($value),
             ],
             self::FIELD_IS_ON_PASSWORD_RECOVERY_FORM => [
                 'formName' => SettingsFormType::IS_ON_PASSWORD_RECOVERY_FORM,
-                'coerce' => fn($value) => boolExtended($value),
+                'coerce' => fn ($value) => boolExtended($value),
             ],
             self::FIELD_IS_ON_CONTACT_FORM => [
                 'formName' => SettingsFormType::IS_ON_CONTACT_FORM,
-                'coerce' => fn($value) => boolExtended($value),
-            ]
+                'coerce' => fn ($value) => boolExtended($value),
+            ],
         ];
     }
 
@@ -118,7 +118,7 @@ final class SettingsConfiguration implements DataConfigurationInterface
      *
      * @param array<string, mixed> $configuration
      *
-     * @return string[] Errors.
+     * @return string[] errors
      */
     public function updateConfiguration(array $configuration): array
     {

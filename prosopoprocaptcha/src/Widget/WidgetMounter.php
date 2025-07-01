@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Widget;
 
-use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
-use Tools;
 use function WPLake\Typed\string;
 
 final class WidgetMounter
@@ -27,8 +25,8 @@ final class WidgetMounter
     {
         $mountPoint = $this->getMountPoint($controllerName);
 
-        if ($mountPoint instanceof WidgetMountPoint &&
-            $mountPoint->isMountingExpected()) {
+        if ($mountPoint instanceof WidgetMountPoint
+            && $mountPoint->isMountingExpected()) {
             $widgetHtml = WidgetIntegration::renderWidget($mountPoint->settingName);
 
             // empty if integration is not active

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha;
 
-use PrestaShopLogger;
-
 final class Logger
 {
     const LEVEL_INFO = 1;
@@ -16,7 +14,7 @@ final class Logger
     public static function log(int $level, string $message): void
     {
         if ($level >= self::$minimumLevel) {
-            PrestaShopLogger::addLog($message, $level);
+            \PrestaShopLogger::addLog($message, $level);
         }
     }
 }

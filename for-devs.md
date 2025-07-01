@@ -58,6 +58,15 @@ cd prosopoprocaptcha
 composer phpstan
 ```
 
+## 3.2) CodeSniffer Fixer
+
+(php_codesniffer fixer)
+
+```bash
+cd prosopoprocaptcha
+composer phpcs
+```
+
 # 4. Known issues
 
 * Debug mode - there is a [known issue](https://github.com/PrestaShop/PrestaShop/issues/38771) with the debug mode in
