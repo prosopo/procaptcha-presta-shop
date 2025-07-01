@@ -7,10 +7,24 @@ is dockered according to the
 Make sure docker is installed, then use the following commands:
 
 ```bash
-cd docker
+# 1. install composer dependencies
+cd prosopoprocaptcha
+composer install
+
+# 2. run docker image
+cd ../docker
 docker compose --file prestashop.docker-compose.yml up -d --force-recreate
-# only once
+
+# 2.1) restore the DB - only once
 bash ./tools/restore-db.sh
+
+# 2.2) to modify installation files or execute any prestashop CLI commands:
+docker exec -it prestashop /bin/bash
+
+# 2.3) to stop
+docker compose -f presta-shop.docker-compose.yml down
+
+# 3. access details:
 
 # Presta admin
 # visit: localhost:9461/secure-dashboard 
@@ -22,12 +36,6 @@ bash ./tools/restore-db.sh
 
 # PHPMyAdmin
 # visit: localhost:9385
-
-# to modify installation files or execute any prestashop CLI commands:
-docker exec -it prestashop /bin/bash
-
-# to stop
-docker compose -f presta-shop.docker-compose.yml down
 ```
 
 * DB and FS volumes are configured; so the setup is reused between container launches

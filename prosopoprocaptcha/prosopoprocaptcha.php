@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-use Io\Prosopo\Procaptcha\Logger;
 use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
 use Io\Prosopo\Procaptcha\Widget\Widget;
 use Io\Prosopo\Procaptcha\Widget\WidgetIntegration;
 use Io\Prosopo\Procaptcha\Widget\WidgetMounter;
 use Io\Prosopo\Procaptcha\Widget\WidgetMountPoint;
 use function WPLake\Typed\string;
+use PrestaShopBundle\Service\Routing\Router;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -61,17 +61,23 @@ final class ProsopoProcaptcha extends Module
         parent::__construct();
 
         // todo uncomment during development.
-       /* foreach (array_diff(self::HOOKS, ['createAccountForm']) as $hook) {
-            if ($this->isRegisteredInHook($hook)) {
-                continue;
-            }
+        /* foreach (array_diff(self::HOOKS, ['createAccountForm']) as $hook) {
+             if ($this->isRegisteredInHook($hook)) {
+                 continue;
+             }
 
-            $this->registerHook($hook);
-        }*/
+             $this->registerHook($hook);
+         }*/
 
-        $this->displayName = $this->trans('Prosopo Procaptcha', [], 'Modules.Prosopoprocaptcha.Admin');
-        $this->description = $this->trans('GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.', [], 'Modules.Prosopoprocaptcha.Admin');
-        $this->confirmUninstall = $this->trans('Are you sure you want to uninstall?', [], 'Modules.Prosopoprocaptcha.Admin');
+        $this->displayName = string(
+            $this->trans('Prosopo Procaptcha', [], 'Modules.Prosopoprocaptcha.Admin')
+        );
+        $this->description = string(
+            $this->trans('GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.', [], 'Modules.Prosopoprocaptcha.Admin')
+        );
+        $this->confirmUninstall = string(
+            $this->trans('Are you sure you want to uninstall?', [], 'Modules.Prosopoprocaptcha.Admin')
+        );
 
         $widgetMountPoints = $this->getWidgetMountPoints();
         $this->widgetMounter = new WidgetMounter($widgetMountPoints);
@@ -99,9 +105,13 @@ final class ProsopoProcaptcha extends Module
 
     public function getContent(): void
     {
-        $route = $this->get('router')->generate('prosopo_procaptcha_settings');
+        $router = $this->get('router');
 
-        Tools::redirectAdmin($route);
+        if ($router instanceof Router) {
+            $route = $router->generate('prosopo_procaptcha_settings');
+
+            Tools::redirectAdmin($route);
+        }
     }
 
     /**
@@ -162,12 +172,10 @@ final class ProsopoProcaptcha extends Module
 
     protected function displayPreviousSubmissionError(string $currentController): bool
     {
-        $validationError = $this->context->cookie->{self::COOKIE_VALIDATION_ERROR} ?? '';
-        $validationErrorController = string($validationError);
+        $validationErrorController = $this->getCookie(self::COOKIE_VALIDATION_ERROR);
 
         if ($currentController === $validationErrorController) {
-            unset($this->context->cookie->{self::COOKIE_VALIDATION_ERROR});
-            $this->context->cookie->write();
+            $this->deleteCookie(self::COOKIE_VALIDATION_ERROR);
 
             $this->addWidgetValidationError(WidgetMountPoint::ERROR_TYPE_CONTROLLER);
 
@@ -217,11 +225,14 @@ final class ProsopoProcaptcha extends Module
     {
         return [
             WidgetMountPoint::ERROR_TYPE_CONTROLLER => function () {
-                $this->context->controller->errors[] = Widget::getValidationError();
+                $controller = $this->context->controller;
+
+                if ($controller instanceof Controller) {
+                    $controller->errors[] = Widget::getValidationError();
+                }
             },
             WidgetMountPoint::ERROR_TYPE_REDIRECT => function () {
-                $this->context->cookie->{self::COOKIE_VALIDATION_ERROR} = $this->getCurrentControllerName();
-                $this->context->cookie->write();
+                $this->setCookie(self::COOKIE_VALIDATION_ERROR, $this->getCurrentControllerName());
 
                 $currentUrl = Tools::getCurrentUrl();
                 Tools::redirect($currentUrl);
@@ -243,6 +254,39 @@ final class ProsopoProcaptcha extends Module
     {
         if (key_exists($errorType, $this->widgetValidationErrorHandlers)) {
             $this->widgetValidationErrorHandlers[$errorType]();
+        }
+    }
+
+    protected function setCookie(string $name, string $value): void
+    {
+        $cookie = $this->context->cookie;
+
+        if ($cookie instanceof Cookie) {
+            $cookie->{$name} = $value;
+            $cookie->write();
+        }
+    }
+
+    protected function getCookie(string $name): string
+    {
+        $cookie = $this->context->cookie;
+
+        if ($cookie instanceof Cookie) {
+            $value = $cookie->{$name} ?? '';
+
+            return string($value);
+        }
+
+        return '';
+    }
+
+    protected function deleteCookie(string $name): void
+    {
+        $cookie = $this->context->cookie;
+
+        if ($cookie instanceof Cookie) {
+            unset($cookie->{$name});
+            $cookie->write();
         }
     }
 }
