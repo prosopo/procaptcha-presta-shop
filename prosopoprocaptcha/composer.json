@@ -37,6 +37,6 @@
         "phpcs": "vendor/bin/php-cs-fixer fix",
         "add_index_files": "vendor/bin/autoindex prestashop:add:index .",
         "header_license": "vendor/bin/header-stamp --license=./assets/license.txt  --header-discrimination-string=Prosopo --extensions=php,min.js --exclude=vendor,assets",
-        "before_release": "composer phpstan && composer phpcs && composer add_index_files"
+        "before_release": "composer phpstan && composer phpcs && composer add_index_files && composer header_license"
     }
 }

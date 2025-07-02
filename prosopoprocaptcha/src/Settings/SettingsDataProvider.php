@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright 2021-2025 Prosopo (UK) Ltd.
  *
