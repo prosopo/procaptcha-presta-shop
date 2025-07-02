@@ -3,7 +3,7 @@
     "description": "Procaptcha - GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website",
     "type": "prestashop-module",
     "author": "Prosopo",
-    "license": "OSL-3.0",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "PrestaShop SA",

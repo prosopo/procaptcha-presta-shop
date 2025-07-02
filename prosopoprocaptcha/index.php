@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright 2021-2025 Prosopo (UK) Ltd.
  *
@@ -17,7 +16,7 @@
  *
  * @author Prosopo <team@prosopo.io>
  * @copyright Prosopo
- * @license Apache License, Version 2.0
+ * @license Apache-2.0
  */
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');

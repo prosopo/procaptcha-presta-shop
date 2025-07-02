@@ -16,7 +16,7 @@
  *
  * @author Prosopo <team@prosopo.io>
  * @copyright Prosopo
- * @license Apache License, Version 2.0
+ * @license Apache-2.0
  */
 
 declare(strict_types=1);
