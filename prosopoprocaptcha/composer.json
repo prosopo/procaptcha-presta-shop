@@ -36,7 +36,7 @@
         "phpstan": "_PS_ROOT_DIR_=../docker/volumes/prestashop ./vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon",
         "phpcs": "vendor/bin/php-cs-fixer fix",
         "add_index_files": "vendor/bin/autoindex prestashop:add:index .",
-        "header_license": "vendor/bin/header-stamp --license=./assets/license.txt --exclude=vendor --extensions=php,twig",
+        "header_license": "vendor/bin/header-stamp --license=./assets/license.txt  --header-discrimination-string=Prosopo --extensions=php,min.js --exclude=vendor,assets",
         "before_release": "composer phpstan && composer phpcs && composer add_index_files"
     }
 }

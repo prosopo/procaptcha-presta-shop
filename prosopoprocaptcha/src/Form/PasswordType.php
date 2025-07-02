@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2021-2025 Prosopo (UK) Ltd.
  *
@@ -13,6 +14,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author Prosopo <team@prosopo.io>
+ * @copyright Prosopo
+ * @license Apache License, Version 2.0
  */
 
 declare(strict_types=1);
@@ -30,6 +35,7 @@ final class PasswordType extends \Symfony\Component\Form\Extension\Core\Type\Pas
 {
     /**
      * @phpstan-param FormInterface<array<string,mixed>> $form
+     *
      * @param array<string, mixed> $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2021-2025 Prosopo (UK) Ltd.
  *
@@ -13,6 +14,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author Prosopo <team@prosopo.io>
+ * @copyright Prosopo
+ * @license Apache License, Version 2.0
  */
 
 declare(strict_types=1);
@@ -25,6 +30,7 @@ if (!defined('_PS_VERSION_')) {
 
 use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
 use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
+
 final class SettingsDataProvider implements FormDataProviderInterface
 {
     private DataConfigurationInterface $settingsConfiguration;

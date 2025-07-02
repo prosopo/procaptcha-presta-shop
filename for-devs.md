@@ -87,7 +87,7 @@ composer phpcs
 Prestashop requires:
 
 * `index.php` in every folder
-* license header in every file
+* license header in every file (license text is in `/assets/license.txt`)
 
 ```bash
 cd prosopoprocaptcha
@@ -97,18 +97,21 @@ composer header_license
 
 # 5. Making a new release
 
+Don't forget to update the version number in the following places:
+
+* config.xml
+* prosopoprocaptcha.php (constant & class variable)
+
 ```bash
-# 1. update version: constant in the '/prosopoprocaptcha.php' file
-# 2. build assets:
+# 1. build assets:
 cd ./prosopoprocaptcha/assets
 yarn build
 
-# 3. run code quality checks
+# 2. run code quality checks & apply formatting
 cd ./prosopoprocaptcha
-# runs all code quality commands
 composer before_release
 
-# 4. make module archive
+# 3. make module archive
 cd ./tools
 bash ./extract-module.sh
 
@@ -120,6 +123,8 @@ bash ./extract-module.sh
 * Debug mode - there is a [known issue](https://github.com/PrestaShop/PrestaShop/issues/38771) with the debug mode in
   the dockered PrestaShop, so
   the current setup has the `config/defines_custom.inc.php` file underscored - to avoid inclusion
+* [Header stamp tool](https://github.com/PrestaShopCorp/header-stamp) is setup to process only `php` and `min.js`
+  files - with `.twig` it breaks the file
 * `prosopoprocaptcha` module doesn't contain neither dash nor underscore
   as [recommended by the Docs](https://devdocs.prestashop-project.org/8/modules/creation/tutorial/)
 
