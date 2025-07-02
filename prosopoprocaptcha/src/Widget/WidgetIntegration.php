@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Widget;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
 
 final class WidgetIntegration

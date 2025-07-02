@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Widget;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
 
 use function WPLake\Typed\bool;
@@ -18,7 +22,7 @@ final class Widget
     private const SERVICE_SCRIPT_URL = 'https://js.prosopo.io/js/procaptcha.bundle.js';
     private const API_URL = 'https://api.prosopo.io/siteverify';
     private const TOKEN_FIELD_NAME = 'procaptcha-response';
-    private const WIDGET_SCRIPT = 'modules/prosopoprocaptcha/dist/widget-integration.min.js';
+    private const WIDGET_SCRIPT = 'modules/prosopoprocaptcha/views/js/widget-integration.min.js';
 
     public static function renderWidget(): string
     {

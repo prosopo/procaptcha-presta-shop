@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Settings;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Io\Prosopo\Procaptcha\Form\PasswordType;
 use PrestaShopBundle\Form\Admin\Type\SwitchType;
 use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;

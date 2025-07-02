@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Widget;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * When there are no hooks in the target template and/or validation process:
  * 1) injection is used to add captcha, as straight template overriding isn't supported https://devdocs.prestashop-project.org/8/modules/concepts/overrides/

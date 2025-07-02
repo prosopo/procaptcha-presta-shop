@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Settings;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
 use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
-
 final class SettingsDataProvider implements FormDataProviderInterface
 {
     private DataConfigurationInterface $settingsConfiguration;

@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Settings;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Io\Prosopo\Procaptcha\Views;
 use Io\Prosopo\Procaptcha\Widget\Widget;
 use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
@@ -54,9 +58,6 @@ class SettingsController extends FrameworkBundleAdminController
         return $this->renderSettingsPage($form);
     }
 
-    /**
-     * @param FormInterface<array<string, mixed>> $form
-     */
     private function renderSettingsPage(FormInterface $form): Response
     {
         $siteKey = $this->settingsConfiguration::getField(SettingsConfiguration::FIELD_SITE_KEY);

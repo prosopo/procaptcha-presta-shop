@@ -82,6 +82,15 @@ cd prosopoprocaptcha
 composer phpcs
 ```
 
+## 4.3) Others
+
+Prestashop requires `index.php` in every folder:
+
+```bash
+cd prosopoprocaptcha
+composer add_index_files
+```
+
 # 5. Making a new release
 
 ```bash
@@ -92,8 +101,8 @@ yarn build
 
 # 3. run code quality checks
 cd ./prosopoprocaptcha
-composer phpstan
-composer phpcs
+# runs all code quality commands
+composer before_release
 
 # 4. make module archive
 cd ./tools

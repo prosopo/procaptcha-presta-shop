@@ -19,7 +19,8 @@
     "prestashop/php-dev-tools": "^5.0",
     "phpstan/phpstan": "^2.1",
     "squizlabs/php_codesniffer": "^3.13",
-    "friendsofphp/php-cs-fixer": "^3.76"
+    "friendsofphp/php-cs-fixer": "^3.76",
+    "prestashop/autoindex": "^2.1"
   },
   "autoload": {
     "psr-4": {
@@ -32,6 +33,8 @@
   },
   "scripts": {
     "phpstan": "_PS_ROOT_DIR_=../docker/volumes/prestashop ./vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon",
-    "phpcs": "vendor/bin/php-cs-fixer fix"
+    "phpcs": "vendor/bin/php-cs-fixer fix",
+    "add_index_files": "vendor/bin/autoindex prestashop:add:index .",
+    "before_release": "composer phpstan && composer phpcs && composer add_index_files"
   }
 }

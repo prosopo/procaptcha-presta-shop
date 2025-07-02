@@ -12,6 +12,10 @@
 
 declare(strict_types=1);
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Io\Prosopo\Procaptcha\Settings\SettingsConfiguration;
 use Io\Prosopo\Procaptcha\Widget\Widget;
 use Io\Prosopo\Procaptcha\Widget\WidgetIntegration;
@@ -20,10 +24,6 @@ use Io\Prosopo\Procaptcha\Widget\WidgetMountPoint;
 use PrestaShopBundle\Service\Routing\Router;
 
 use function WPLake\Typed\string;
-
-if (!defined('_PS_VERSION_')) {
-    exit;
-}
 
 final class ProsopoProcaptcha extends Module
 {
@@ -72,15 +72,9 @@ final class ProsopoProcaptcha extends Module
              $this->registerHook($hook);
          }*/
 
-        $this->displayName = string(
-            $this->trans('Prosopo Procaptcha', [], 'Modules.Prosopoprocaptcha.Admin')
-        );
-        $this->description = string(
-            $this->trans('GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.', [], 'Modules.Prosopoprocaptcha.Admin')
-        );
-        $this->confirmUninstall = string(
-            $this->trans('Are you sure you want to uninstall?', [], 'Modules.Prosopoprocaptcha.Admin')
-        );
+        $this->displayName = $this->l('Prosopo Procaptcha');
+        $this->description = $this->l('GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.');
+        $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 
         $widgetMountPoints = $this->getWidgetMountPoints();
         $this->widgetMounter = new WidgetMounter($widgetMountPoints);
@@ -216,7 +210,7 @@ final class ProsopoProcaptcha extends Module
             'password' => (new WidgetMountPoint())
                 ->setSettingName(SettingsConfiguration::FIELD_IS_ON_PASSWORD_RECOVERY_FORM)
                 ->setSubmitField('email')
-                ->setAnchor('<section class="form-fields">')
+                ->setAnchor('<section class="form-fields"')
                 ->setPosition(WidgetMountPoint::POSITION_BEFORE),
         ];
     }
@@ -249,7 +243,7 @@ final class ProsopoProcaptcha extends Module
 
         return $controller instanceof Controller ?
             // for some reason, on the "my alerts page" it contains NULL
-            (string) $controller->php_self :
+            (string)$controller->php_self :
             '';
     }
 

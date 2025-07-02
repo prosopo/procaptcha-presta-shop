@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha\Widget;
 
-use function WPLake\Typed\string;
-
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 final class WidgetMounter
 {
     /**

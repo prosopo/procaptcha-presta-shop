@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Io\Prosopo\Procaptcha;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Twig\Environment;
 
 final class Views
