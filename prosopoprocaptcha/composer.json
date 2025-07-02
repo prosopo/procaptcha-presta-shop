@@ -1,42 +1,42 @@
 {
-  "name": "prosopo/procaptcha-prestashop",
-  "description": "Procaptcha - GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website",
-  "type": "prestashop-module",
-  "author": "Prosopo",
-  "license": "MIT License",
-  "authors": [
-    {
-      "name": "Prosopo",
-      "email": "team@prosopo.io"
+    "name": "prosopo/procaptcha-prestashop",
+    "description": "Procaptcha - GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website",
+    "type": "prestashop-module",
+    "author": "Prosopo",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "name": "PrestaShop SA",
+            "email": "contact@prestashop.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4.0",
+        "wplake/typed": "^1.2",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "prestashop/php-dev-tools": "^5.0",
+        "phpstan/phpstan": "^2.1",
+        "squizlabs/php_codesniffer": "^3.13",
+        "friendsofphp/php-cs-fixer": "^3.76",
+        "prestashop/autoindex": "^2.1",
+        "prestashop/header-stamp": "^2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Io\\Prosopo\\Procaptcha\\": "src/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "prepend-autoloader": false
+    },
+    "scripts": {
+        "phpstan": "_PS_ROOT_DIR_=../docker/volumes/prestashop ./vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon",
+        "phpcs": "vendor/bin/php-cs-fixer fix",
+        "add_index_files": "vendor/bin/autoindex prestashop:add:index .",
+        "header_license": "vendor/bin/header-stamp --license=./assets/license.txt --exclude=vendor --extensions=php,twig",
+        "before_release": "composer phpstan && composer phpcs && composer add_index_files"
     }
-  ],
-  "require": {
-    "php": ">=7.4.0",
-    "wplake/typed": "^1.2",
-    "ext-json": "*"
-  },
-  "require-dev": {
-    "prestashop/php-dev-tools": "^5.0",
-    "phpstan/phpstan": "^2.1",
-    "squizlabs/php_codesniffer": "^3.13",
-    "friendsofphp/php-cs-fixer": "^3.76",
-    "prestashop/autoindex": "^2.1",
-    "prestashop/header-stamp": "^2.6"
-  },
-  "autoload": {
-    "psr-4": {
-      "Io\\Prosopo\\Procaptcha\\": "src/"
-    }
-  },
-  "config": {
-    "preferred-install": "dist",
-    "prepend-autoloader": false
-  },
-  "scripts": {
-    "phpstan": "_PS_ROOT_DIR_=../docker/volumes/prestashop ./vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon",
-    "phpcs": "vendor/bin/php-cs-fixer fix",
-    "add_index_files": "vendor/bin/autoindex prestashop:add:index .",
-    "header_license": "vendor/bin/header-stamp --license=./assets/license.txt --exclude=vendor,assets",
-    "before_release": "composer phpstan && composer phpcs && composer add_index_files"
-  }
 }

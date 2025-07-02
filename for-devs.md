@@ -84,11 +84,15 @@ composer phpcs
 
 ## 4.3) Others
 
-Prestashop requires `index.php` in every folder:
+Prestashop requires:
+
+* `index.php` in every folder
+* license header in every file
 
 ```bash
 cd prosopoprocaptcha
 composer add_index_files
+composer header_license
 ```
 
 # 5. Making a new release
