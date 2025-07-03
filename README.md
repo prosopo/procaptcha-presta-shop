@@ -1,10 +1,7 @@
 ## Prosopo Procaptcha Integration for PrestaShop
 
-Welcome to the GitHub repository for
+Welcome to the official GitHub repository for
 the [Prosopo Procaptcha](https://prosopo.io/) Integration for PrestaShop!
-
-We ensure this repository is kept up-to-date with the latest version. Feel free to open issues or submit pull requests
-directly here — any changes made will be included in the next official release.
 
 ## 1. Installation
 
@@ -12,6 +9,18 @@ Minimum requirements:
 
 * PHP 7.4+
 * PrestaShop 8.0.0+
+
+Installation
+
+1. Download the [latest module release](https://github.com/prosopo/procaptcha-presta-shop/releases)
+2. Go to your Prestashop dashboard -> Modules -> Module Manager -> Upload a Module
+3. Visit the Module Manager page -> Locate Prosopo Procaptcha in the list -> Click Enable
+4. After enabling, click Configure and enter your Secret Key and Site Key (you can get these
+   from [portal.prosopo.io](https://portal.prosopo.io/))
+5. Enable protection for your target forms (e.g., registration, login, contact forms) and click Save
+6. Make sure the captcha widget preview below the form is displayed correctly
+
+Now you're all set! Enjoy enhanced anti-spam protection with Prosopo Procaptcha.
 
 ## 2. Supported forms
 
