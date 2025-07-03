@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="secure-dashboard" source-language="fr-FR" target-language="fr-FR" datatype="plaintext">
+    <body>
+      <trans-unit id="884a711f3269ae9404aabe1739580abd">
+        <source>Visit Website</source>
+        <target>Visiter le site</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="df834f82728215d337bc9288ac81f8bb">
+        <source>Open Docs</source>
+        <target>Ouvrir la documentation</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="dc0bb1d0cc467949e5d7c04bceae0ba1">
+        <source>Visit Portal</source>
+        <target>Visiter le portail</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e2a774f9a03ccb16f26659a3747b33d6">
+        <source>GDPR compliant, privacy friendly and better value captcha.</source>
+        <target>Captcha conforme au RGPD, respectueux de la vie privée et plus avantageux.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bafd7322c6e97d25b6299b5d6fe8920b">
+        <source>No</source>
+        <target>Non</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="93cba07454f06a4a960172bbd6e2a435">
+        <source>Yes</source>
+        <target>Oui</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7d2820dfa086a9da37322697264462c3">
+        <source>Your secret key</source>
+        <target>Votre clé secrète</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="37d5f6e2279aeaf1bbf191e8d3e09fb1">
+        <source>Your site key</source>
+        <target>Votre clé de site</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d721757161f7f70c5b0949fdb6ec2c30">
+        <source>Theme</source>
+        <target>Thème</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9914a0ce04a7b7b6a8e39bec55064b82">
+        <source>Light</source>
+        <target>Clair</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a18366b217ebf811ad1886e4f4f865b2">
+        <source>Dark</source>
+        <target>Sombre</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a1fa27779242b4902f7ae3bdd5c6d508">
+        <source>Type</source>
+        <target>Type</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="49c8b34d9630706cee7fc5fddc29cf9d">
+        <source>Frictionless</source>
+        <target>Sans friction</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="be53a0541a6d36f6ecb879fa2c584b08">
+        <source>Image</source>
+        <target>Image</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3c738f8f7d8181bdcbaf5fa004309ce4">
+        <source>Proof of Work</source>
+        <target>Preuve de travail</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1a3e478c440fbbe1e460f9801de1dd6f">
+        <source>Registration form protection</source>
+        <target>Protection du formulaire d’inscription</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4cba422a8b08c5cff81040e17b6ef912">
+        <source>Login form protection</source>
+        <target>Protection du formulaire de connexion</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1650c537488765069e2e280e0304a7ea">
+        <source>Password recovery form protection</source>
+        <target>Protection du formulaire de récupération de mot de passe</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="624a84df854e0829bee033f49c125300">
+        <source>Contact form protection</source>
+        <target>Protection du formulaire de contact</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6c39c0eb689a7d25abd5b63c82a34271">
+        <source>Procaptcha settings</source>
+        <target>Paramètres Procaptcha</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="249212ebba2907c6087887db076179e6">
+        <source>Back to modules list</source>
+        <target>Retour à la liste des modules</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1da97b78945c88720d06b9b26cd0f85c">
+        <source>Widget preview</source>
+        <target>Aperçu du widget</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b001a95a618f21d418f51e222babe5b9">
+        <source>If the credentials are valid, you should be able to complete the captcha below:</source>
+        <target>Si les identifiants sont valides, vous devriez pouvoir compléter le captcha ci-dessous:</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

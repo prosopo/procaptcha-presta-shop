@@ -73,18 +73,15 @@ final class ProsopoProcaptcha extends Module
 
         parent::__construct();
 
-        // todo uncomment during development.
-        /* foreach (array_diff(self::HOOKS, ['createAccountForm']) as $hook) {
-             if ($this->isRegisteredInHook($hook)) {
-                 continue;
-             }
-
-             $this->registerHook($hook);
-         }*/
-
-        $this->displayName = $this->l('Prosopo Procaptcha');
-        $this->description = $this->l('GDPR compliant, privacy-friendly, and better-value CAPTCHA for your PrestaShop website.');
-        $this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
+        $this->displayName = string(
+            $this->trans('Prosopo Procaptcha', [], 'Modules.ProsopoProcaptcha.Admin')
+        );
+        $this->description = string(
+            $this->trans('GDPR compliant, privacy friendly and better value captcha.', [], 'Modules.ProsopoProcaptcha.Admin')
+        );
+        $this->confirmUninstall = string(
+            $this->trans('Are you sure you want to uninstall?', [], 'Modules.ProsopoProcaptcha.Admin')
+        );
 
         $widgetMountPoints = $this->getWidgetMountPoints();
         $this->widgetMounter = new WidgetMounter($widgetMountPoints);
@@ -119,6 +116,11 @@ final class ProsopoProcaptcha extends Module
 
             Tools::redirectAdmin($route);
         }
+    }
+
+    public function isUsingNewTranslationSystem(): bool
+    {
+        return true;
     }
 
     /**
@@ -253,7 +255,7 @@ final class ProsopoProcaptcha extends Module
 
         return $controller instanceof Controller ?
             // for some reason, on the "my alerts page" it contains NULL
-            (string) $controller->php_self :
+            (string)$controller->php_self :
             '';
     }
 
