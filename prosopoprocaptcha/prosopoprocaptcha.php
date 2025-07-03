@@ -255,7 +255,7 @@ final class ProsopoProcaptcha extends Module
 
         return $controller instanceof Controller ?
             // for some reason, on the "my alerts page" it contains NULL
-            (string)$controller->php_self :
+            (string) $controller->php_self :
             '';
     }
 
