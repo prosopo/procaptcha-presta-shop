@@ -37,7 +37,7 @@ docker exec -it prestashop /bin/bash
 # 2.3) to stop
 
 # in the /docker folder
-docker compose -f presta-shop.docker-compose.yml down
+docker compose -f prestashop.docker-compose.yml down
 
 # 3. access details:
 

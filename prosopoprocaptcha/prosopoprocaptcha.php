@@ -34,7 +34,7 @@ use PrestaShopBundle\Service\Routing\Router;
 
 use function WPLake\Typed\string;
 
-final class ProsopoProcaptcha extends Module
+class Prosopoprocaptcha extends Module
 {
     const VERSION = '1.0.0';
     const HOOKS = [
@@ -51,11 +51,7 @@ final class ProsopoProcaptcha extends Module
      */
     const COOKIE_VALIDATION_ERROR = 'procaptcha-error';
 
-    private WidgetMounter $widgetMounter;
-    /**
-     * @var array<string,callable>
-     */
-    private array $widgetValidationErrorHandlers;
+    private ?WidgetMounter $widgetMounter = null;
 
     public function __construct()
     {
@@ -73,20 +69,14 @@ final class ProsopoProcaptcha extends Module
 
         parent::__construct();
 
-        $this->displayName = string(
-            $this->trans('Prosopo Procaptcha', [], 'Modules.ProsopoProcaptcha.Admin')
-        );
-        $this->description = string(
-            $this->trans('GDPR compliant, privacy friendly and better value captcha.', [], 'Modules.ProsopoProcaptcha.Admin')
-        );
-        $this->confirmUninstall = string(
-            $this->trans('Are you sure you want to uninstall?', [], 'Modules.ProsopoProcaptcha.Admin')
-        );
+        // Important: do not use any internal or external module dependencies here - they are not loaded yet.
 
-        $widgetMountPoints = $this->getWidgetMountPoints();
-        $this->widgetMounter = new WidgetMounter($widgetMountPoints);
-
-        $this->widgetValidationErrorHandlers = $this->getWidgetValidationErrorHandlers();
+        // @phpstan-ignore-next-line
+        $this->displayName = $this->trans('Prosopo Procaptcha', [], 'Modules.ProsopoProcaptcha.Admin');
+        // @phpstan-ignore-next-line
+        $this->description = $this->trans('GDPR compliant, privacy friendly and better value captcha.', [], 'Modules.ProsopoProcaptcha.Admin');
+        // @phpstan-ignore-next-line
+        $this->confirmUninstall = $this->trans('Are you sure you want to uninstall?', [], 'Modules.ProsopoProcaptcha.Admin');
     }
 
     public function install(): bool
@@ -159,7 +149,7 @@ final class ProsopoProcaptcha extends Module
         $html = string($arguments, 'html');
 
         // no return, as 'html' key is passed as a reference (aka pointer)
-        $arguments['html'] = $this->widgetMounter->mountWidget($controllerName, $html);
+        $arguments['html'] = $this->getWidgetMounter()->mountWidget($controllerName, $html);
     }
 
     public function hookActionFrontControllerInitAfter(): void
@@ -170,7 +160,7 @@ final class ProsopoProcaptcha extends Module
             return;
         }
 
-        $errorType = $this->widgetMounter->validateControllerMountPoint($controllerName);
+        $errorType = $this->getWidgetMounter()->validateControllerMountPoint($controllerName);
 
         if (is_null($errorType)) {
             return;
@@ -192,6 +182,17 @@ final class ProsopoProcaptcha extends Module
         }
 
         return false;
+    }
+
+    protected function getWidgetMounter(): WidgetMounter
+    {
+        if (is_null($this->widgetMounter)) {
+            $this->widgetMounter = new WidgetMounter(
+                $this->getWidgetMountPoints()
+            );
+        }
+
+        return $this->widgetMounter;
     }
 
     /**
@@ -261,8 +262,10 @@ final class ProsopoProcaptcha extends Module
 
     protected function addWidgetValidationError(string $errorType): void
     {
-        if (key_exists($errorType, $this->widgetValidationErrorHandlers)) {
-            $this->widgetValidationErrorHandlers[$errorType]();
+        $widgetValidationErrorHandlers = $this->getWidgetValidationErrorHandlers();
+
+        if (key_exists($errorType, $widgetValidationErrorHandlers)) {
+            $widgetValidationErrorHandlers[$errorType]();
         }
     }
 

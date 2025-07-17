@@ -74,7 +74,7 @@ style="margin: 0 0 20px;display:flex;justify-content: center;">
 
         $widgetIntegrationScript = sprintf('%s?ver=%s',
             __PS_BASE_URI__ . self::WIDGET_SCRIPT,
-            \ProsopoProcaptcha::VERSION
+            \Prosopoprocaptcha::VERSION
         );
 
         return
