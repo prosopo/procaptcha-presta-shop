@@ -38,6 +38,9 @@ use function WPLake\Typed\string;
  */
 final class Widget
 {
+    // Prosopoprocaptcha module class has a version number but is not available here...
+    const ASSETS_VERSION = '1.0.0';
+
     private const SERVICE_SCRIPT_URL = 'https://js.prosopo.io/js/procaptcha.bundle.js';
     private const API_URL = 'https://api.prosopo.io/siteverify';
     private const TOKEN_FIELD_NAME = 'procaptcha-response';
@@ -70,11 +73,11 @@ style="margin: 0 0 20px;display:flex;justify-content: center;">
             'captchaType' => SettingsConfiguration::getField(SettingsConfiguration::FIELD_TYPE),
         ];
 
-        $jsonOptions = (string) json_encode($options);
+        $jsonOptions = (string)json_encode($options);
 
         $widgetIntegrationScript = sprintf('%s?ver=%s',
             __PS_BASE_URI__ . self::WIDGET_SCRIPT,
-            \Prosopoprocaptcha::VERSION
+            self::ASSETS_VERSION
         );
 
         return

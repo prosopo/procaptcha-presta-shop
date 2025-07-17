@@ -100,7 +100,8 @@ composer header_license
 Don't forget to update the version number in the following places:
 
 * config.xml
-* prosopoprocaptcha.php (constant & class variable)
+* prosopoprocaptcha.php (constructor)
+* Widget/Widget.php (ASSETS_VERSION constant)
 
 ```bash
 # 1. build assets:

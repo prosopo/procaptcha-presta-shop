@@ -36,7 +36,6 @@ use function WPLake\Typed\string;
 
 class Prosopoprocaptcha extends Module
 {
-    const VERSION = '1.0.0';
     const HOOKS = [
         // generic hooks - for cases when no integration-specific hooks are present
         'actionFrontControllerInitAfter',
