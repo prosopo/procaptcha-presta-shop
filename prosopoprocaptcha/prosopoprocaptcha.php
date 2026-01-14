@@ -55,6 +55,7 @@ class Prosopoprocaptcha extends Module
     public function __construct()
     {
         $this->name = 'prosopoprocaptcha';
+        $this->module_key = '175464202e98087b54ed7f2c9f6dd0a5';
         $this->tab = 'front_office_features';
         // do not use the constant here, it'll fail Prestashop validation
         $this->version = '1.0.0';
