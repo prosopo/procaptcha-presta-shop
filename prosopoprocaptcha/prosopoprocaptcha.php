@@ -211,19 +211,19 @@ class Prosopoprocaptcha extends Module
                 ->setSettingName(SettingsConfiguration::FIELD_IS_ON_LOGIN_FORM)
                 ->setSubmitField('email')
                 ->setErrorType(WidgetMountPoint::ERROR_TYPE_REDIRECT)
-                ->setAnchor('<footer class="form-footer')
+                ->setAnchor('&lt;footer class=&quot;form-footer')
                 ->setPosition(WidgetMountPoint::POSITION_BEFORE),
             // "/contact-us"
             'contact' => (new WidgetMountPoint())
                 ->setSettingName(SettingsConfiguration::FIELD_IS_ON_CONTACT_FORM)
                 ->setSubmitField('submitMessage')
-                ->setAnchor('<footer class="form-footer')
+                ->setAnchor('&lt;footer class=&quot;form-footer')
                 ->setPosition(WidgetMountPoint::POSITION_BEFORE),
             // "/password-recovery"
             'password' => (new WidgetMountPoint())
                 ->setSettingName(SettingsConfiguration::FIELD_IS_ON_PASSWORD_RECOVERY_FORM)
                 ->setSubmitField('email')
-                ->setAnchor('<section class="form-fields"')
+                ->setAnchor('&lt;section class=&quot;form-fields&quot;')
                 ->setPosition(WidgetMountPoint::POSITION_BEFORE),
         ];
     }

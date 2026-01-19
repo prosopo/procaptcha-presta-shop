@@ -70,7 +70,7 @@ final class WidgetMountPoint
 
     public function setAnchor(string $anchor): self
     {
-        $this->anchor = $anchor;
+        $this->anchor = html_entity_decode($anchor);
 
         return $this;
     }
